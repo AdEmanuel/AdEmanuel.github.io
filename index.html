@@ -444,11 +444,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Sumário</div>
 <ul class="sectlevel1">
 <li><a href="#_prefácio">Prefácio</a></li>
+<li><a href="#_parte_i_processamento_de_imagens_no_domínio_espacial">Parte I: Processamento de Imagens no Domínio Espacial</a>
+<ul class="sectlevel1">
 <li><a href="#_1_manipulando_pixels_em_uma_imagem">1. Manipulando Pixels em uma Imagem</a>
 <ul class="sectlevel2">
-<li><a href="#_1_1_preenchimento_de_pixels">1.1. Preenchimento de Pixels</a></li>
+<li><a href="#_1_1_negativo_numa_região">1.1. Negativo numa região</a></li>
 <li><a href="#_1_2_invertendo_regiões">1.2. Invertendo Regiões</a></li>
 <li><a href="#_1_3_trocando_regiões">1.3. Trocando Regiões</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -461,8 +465,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph text-justify">
 <p>Esse site contém a resolução dos exercícios que foram propostos na disciplina Processamento Digital de Imagens ofertada pelo Departamento de Engenharia de Computação e Automação da UFRN e ministrada pelo professor Agostinho Brito. As informações acerca da disciplina podem ser vista em: <a href="https://agostinhobritojr.github.io/tutorial/pdi/" class="bare">https://agostinhobritojr.github.io/tutorial/pdi/</a>.</p>
 </div>
-<div class="paragraph">
-<p>Os exercícios foram desenvolvidos em C++, sendo necessário ter a biblioteca OpenCV <a href="https://opencv.org/" class="bare">https://opencv.org/</a>. As regras de compilação dos códigos estão definidos no arquivo Makefile que está presente no site do curso. Dessa forma, para compilar e executar os códigos foram utilizados os seguintes comandos:</p>
+<div class="paragraph text-justify">
+<p>Os exercícios foram desenvolvidos em C++, sendo necessário ter a biblioteca OpenCV <a href="https://opencv.org/" class="bare">https://opencv.org/</a>. As regras de compilação dos códigos estão definidos no arquivo Makefile que está presente no site do curso. Dessa forma, para compilar e executar os códigos utiliza-se os seguintes comandos:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -472,11 +476,87 @@ $ ./&lt;nome_arquivo&gt; &lt;nome_da_imagem_ou_video&gt;</code></pre>
 </div>
 </div>
 </div>
+<h1 id="_parte_i_processamento_de_imagens_no_domínio_espacial" class="sect0">Parte I: Processamento de Imagens no Domínio Espacial</h1>
 <div class="sect1">
 <h2 id="_1_manipulando_pixels_em_uma_imagem">1. Manipulando Pixels em uma Imagem</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_1_1_preenchimento_de_pixels">1.1. Preenchimento de Pixels</h3>
+<h3 id="_1_1_negativo_numa_região">1.1. Negativo numa região</h3>
+<div class="paragraph text-justify">
+<p>O primeiro programa implementado chama-se <a href="#regions">regions.cpp</a>. Ele solicita ao usuário as coordenadas de dois pontos, P1 e P2, localizados dentro dos limites do tamanho da imagem e usa-os como vértices opostos na criação de um retângulo. A região triangular criada é exibida com o negativo da imagem no local correspondente.</p>
+</div>
+<div id="regions" class="listingblock">
+<div class="title">regioes.cpp</div>
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+  if(!image.data)
+    std::cout &lt;&lt; "A imagem não foi aberta" &lt;&lt; std::endl;
+
+  int cols, rows, x1, x2, y1 ,y2;
+
+  cols = image.cols;
+  rows = image.rows;
+
+  std::cout &lt;&lt; "O tamanho da imagem, em pixels, que será editada é: " &lt;&lt; cols &lt;&lt; "x" &lt;&lt; rows &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; "Dessa forma, defina, respectivamente, as coordenadas x e y dos pontos P1 e P2." &lt;&lt; std::endl;
+  std::cout &lt;&lt; "x1 =";
+  std::cin &gt;&gt; x1;
+  std::cout &lt;&lt; "y1 = ";
+  std::cin &gt;&gt; y1;
+
+  std::cout &lt;&lt; "x2 = ";
+  std::cin &gt;&gt; x2;
+  std::cout &lt;&lt; "y2 = ";
+  std::cin &gt;&gt; y2;
+
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+
+  for(int i=x1;i&lt;x2;i++){
+    for(int j=y1;j&lt;y2;j++){
+	  val = image.at&lt;cv::Vec3b&gt;(i,j);
+
+      val[0] = 255 - val[0];
+      val[1] = 255 - val[1];
+      val[2] = 255 - val[2];
+      image.at&lt;cv::Vec3b&gt;(i,j)= val;
+    }
+  }
+
+  cv::imshow("janela", image);
+  cv::waitKey();
+
+  return 0;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>Num primeiro momento se faz importante observar a presença de trechos de códigos que estão na implemntação acima e serão usados em diveros outros códigos. Sendo eles: leitura e verificação, onde a imagem é aberta e se verifica se há algum erro com ela; e criação e fechamento da janela onde a imagem será exibida.</p>
+</div>
+<div class="listingblock">
+<div class="title">Leitura e Verificação</div>
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+if(!image.data)
+  std::cout &lt;&lt; "A imagem não foi aberta" &lt;&lt; std::endl;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Criação e fechamento da Janela de Visualização</div>
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+...
+cv::imshow("janela", image);
+cv::waitKey();</code></pre>
+</div>
+</div>
 <div class="paragraph text-justify">
 <p>Primeiramente, foi proposto compilar e executar o programa <a href="#pixels">pixels.cpp</a>, que consiste em abrir uma imagem (<a href="#bolhas">bolhas.png</a>) e cobrir uma região com uma coloração qualquer.</p>
 </div>
@@ -833,7 +913,7 @@ int main(int, char**){
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-30 09:42:36 -0300
+Last updated 2023-09-30 14:59:58 -0300
 </div>
 </div>
 </body>
