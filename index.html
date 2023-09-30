@@ -452,6 +452,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_1_2_trocando_regiões">1.2. Trocando regiões</a></li>
 </ul>
 </li>
+<li><a href="#_2_decomposição_de_imagens_em_planos_de_bits">2. Decomposição de imagens em planos de bits</a>
+<ul class="sectlevel2">
+<li><a href="#_2_1_desafio_esteganografia">2.1 Desafio Esteganografia</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -687,6 +692,146 @@ int main(int, char**){
 </div>
 <div class="title">Figure 4. Saída - Lena_trocaregioes.png</div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_decomposição_de_imagens_em_planos_de_bits">2. Decomposição de imagens em planos de bits</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_2_1_desafio_esteganografia">2.1 Desafio Esteganografia</h3>
+<div class="paragraph text-justify">
+<p>O programa <a href="#recupera_imagem">recupera_imagem.cpp</a> recupera a imagem codificada de uma imagem resultante de esteganografia.</p>
+</div>
+<div id="recupera_imagem" class="listingblock">
+<div class="title">recupera_imagem.cpp</div>
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+int main(int argc, char**argv) {
+  cv::Mat imagemEscondida, imagemFinal;
+  cv::Vec3b valEscondida, valFinal;
+  int nbits = 5;
+
+  imagemFinal = cv::imread(argv[1], cv::IMREAD_COLOR);
+
+   if (imagemFinal.empty()) {
+    std::cout &lt;&lt; "imagem nao carregou corretamente" &lt;&lt; std::endl;
+    return (-1);
+  }
+
+  const char* arg2 = argv[2];
+  std::string nome_imagem = arg2;
+  nome_imagem += ".png";
+
+  imagemEscondida = imagemFinal.clone();
+
+  for (int i = 0; i &lt; imagemFinal.rows; i++) {
+    for (int j = 0; j &lt; imagemFinal.cols; j++) {
+
+	  valFinal = imagemFinal.at&lt;cv::Vec3b&gt;(i, j);
+
+      valEscondida[0] = valFinal[0] &lt;&lt; nbits;
+      valEscondida[1] = valFinal[1] &lt;&lt; nbits;
+      valEscondida[2] = valFinal[2] &lt;&lt; nbits;
+
+      imagemEscondida.at&lt;cv::Vec3b&gt;(i, j) = valEscondida;
+
+    }
+  }
+
+  imwrite(nome_imagem, imagemEscondida);
+
+  return 0;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>Neste código, a imagem que será processada tem seu nome digitado pelo usuário durante a chamada do programa. Então, ela tem seu nome resgatado, é aberta e  tem sua integridade testada a partir do código a seguir:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">imagemFinal = cv::imread(argv[1], cv::IMREAD_COLOR);
+
+if (imagemFinal.empty()) {
+  std::cout &lt;&lt; "imagem nao carregou corretamente" &lt;&lt; std::endl;
+  return (-1);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>Logo após, é feito um tratamento para receber o nome da imagem escondida a partir da imagem esteganografada. Tal nome é passado pelo usuário pela linha de comando.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">const char* arg2 = argv[2];
+std::string nome_imagem = arg2;
+nome_imagem += ".png";</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>Em seguida o objeto da clase Mat imagemFinal é clonado e atribuido ao objeto  imagemEscondida. Isso é feito pois, mesmo que o conteúdo da imagem vá mudar, alguns outros atributos precisam ser herdado, como, por exemplo, o tamanho e tipo.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">imagemEscondida = imagemFinal.clone();</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>O par de for aninhados é utilizado para percorrer as linhas e colunas da imagem Final.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">for (int i = 0; i &lt; imagemFinal.rows; i++) {
+  for (int j = 0; j &lt; imagemFinal.cols; j++) {
+    valFinal = imagemFinal.at&lt;cv::Vec3b&gt;(i, j);
+
+    valEscondida[0] = valFinal[0] &lt;&lt; nbits;
+    valEscondida[1] = valFinal[1] &lt;&lt; nbits;
+    valEscondida[2] = valFinal[2] &lt;&lt; nbits;
+
+    imagemEscondida.at&lt;cv::Vec3b&gt;(i, j) = valEscondida;
+
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>Dentro desses for’s, a vairável valFinal guarda as informações do pixels referentes a imagem Final.</p>
+</div>
+<div class="paragraph text-justify">
+<p>No trecho seguinte, os nbits menos significativos de ValFinal são deslocados à esquerda. Como nbits é igual a 5, os bits que dizem respeito a imagem que está escondida passam a ocupar as três primeiras posições do vetor (a <a href="#ilustração">ilustracao_desloc.png</a> demostra como o deslocamento descrito ocorre). Então, imagemEscondida é atualizada com a valEscondida.</p>
+</div>
+<div id="ilustracao_desloc" class="imageblock png">
+<div class="content">
+<img src="PDI/2/ilustracao_desloc.png" alt="bolhas" width="388" height="340">
+</div>
+<div class="title">Figure 5. Ilustração do deslocamento de bits feitos no código.</div>
+</div>
+<div class="paragraph text-justify">
+<p>Por fim, a imagem escondida é salva e atribui-se a ela o nome passado pelo usuário durante a execução do código.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP"> imwrite(nome_imagem, imagemEscondida);</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>O resultado final pode ser visto a seguir.</p>
+</div>
+<div id="desafio-esteganografia" class="imageblock png">
+<div class="content">
+<img src="PDI/1/desafio-esteganografia.png" alt="desafio-esteganografia" width="300" height="400">
+</div>
+<div class="title">Figure 6. Entrada - desafio-esteganografia.png</div>
+</div>
+<div id="i" class="imageblock png">
+<div class="content">
+<img src="PDI/1/im_recuperada.png" alt="im_recuperada" width="300" height="400">
+</div>
+<div class="title">Figure 7. Saída - im_recuperada.png</div>
+</div>
 <div class="paragraph text-justify">
 <p>Primeiramente, foi proposto compilar e executar o programa <a href="#pixels">pixels.cpp</a>, que consiste em abrir uma imagem (<a href="#bolhas">bolhas.png</a>) e cobrir uma região com uma coloração qualquer.</p>
 </div>
@@ -694,7 +839,7 @@ int main(int, char**){
 <div class="content">
 <img src="PDI/2/bolhas.png" alt="bolhas" width="250" height="250">
 </div>
-<div class="title">Figure 5. Bolhas.png</div>
+<div class="title">Figure 8. Bolhas.png</div>
 </div>
 <div id="pixels" class="listingblock cpp">
 <div class="title">Código Fonte pixels.cpp</div>
@@ -748,7 +893,7 @@ int main(int, char**){
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-30 17:26:17 -0300
+Last updated 2023-09-30 20:41:36 -0300
 </div>
 </div>
 </body>
