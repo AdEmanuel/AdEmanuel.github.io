@@ -164,6 +164,65 @@ image::PDI/1/Lena.png[Lena, 512, 512]
 .Saída - Lena_negativo.png
 image::PDI/1/lena_negativo.png[Lena_negativo, 512, 512]
 
+=== 1.2. Trocando regiões
+
+[.text-justify]
+O programa <<trocaregioes,trocaregioes.cpp>> troca os quadrantes em diagonal na imagem.
+
+.trocaregioes.cpp
+[source, CPP]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b aux;
+  
+  image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+  if(!image.data)
+    std::cout << "nao abriu imagem.png" << std::endl;
+
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+
+  for (int i = 0; i < image.rows/2; i++) {
+    for (int j = 0; j < image.cols/2; j++) {
+      aux = image.at<cv::Vec3b>(i,j);
+      image.at<cv::Vec3b>(i,j) = image.at<cv::Vec3b>(i+image.rows/2,j+image.cols/2);
+      image.at<cv::Vec3b>(i+image.rows/2,j+image.cols/2) = aux;
+
+      aux = image.at<cv::Vec3b>(i+image.rows/2,j);
+      image.at<cv::Vec3b>(i+image.rows/2,j) = image.at<cv::Vec3b>(i,j+image.cols/2);
+      image.at<cv::Vec3b>(i,j+image.cols/2) = aux;
+	}
+  }
+  
+  cv::imshow("janela", image);  
+  cv::waitKey();
+  
+  cv::imwrite("Lena_trocaregioes.png", image);
+  
+  return 0;
+}
+----
+
+[.text-justify]
+A troca das regiões da imagem foi feita a partir do aninhamento de dois laços for que irão percorrer metade das linhas e metade das colunas da imagem. 
+
+[.text-justify]
+Dentro dos for’s, pode-se dizer que existem dois blocos de códigos, onde ambos fazem o uso da vairável auxilair trono.Num primeiro momento, a varíavel trono guarda as características do pixel do primeiro quadrante, esse pixel é substituído pelo pixel do quarto quadrante ao se acessar a posição (i+image.rows/2,j+image.cols/2) e então o pixel do quarto quadrante é atualizado ao receber o trono. 
+
+[.text-justify]
+Esse mesmo procedimento se repete no segundo bloco de código, mas dessa vez  o trono é utilizado para fazer a troca entre os elementos do segundo quadrante, acessados na posição (i,j+image.cols/2)  e do terceiro quadrante, acessados na posição (i+image.rows/2,j). 
+
+[.text-justify]
+Assim, ao fim das iterações do laço, as regiões são trocadas, como é possível averiguar na  <<imagem,Lena_trocaregioes.png>>
+
+[#Lena_trocaregioes.png]
+.Saída - Lena_trocaregioes.png
+image::PDI/1/lena_trocaregioes.png[Lena_trocaregioes, 512, 512]
+
+
 [.text-justify]
 Primeiramente, foi proposto compilar e executar o programa <<pixels,pixels.cpp>>, que consiste em abrir uma imagem (<<bolhas,bolhas.png>>) e cobrir uma região com uma coloração qualquer.
 

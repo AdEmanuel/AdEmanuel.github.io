@@ -449,6 +449,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_1_manipulando_pixels_em_uma_imagem">1. Manipulando Pixels em uma Imagem</a>
 <ul class="sectlevel2">
 <li><a href="#_1_1_negativo_numa_região">1.1. Negativo numa região</a></li>
+<li><a href="#_1_2_trocando_regiões">1.2. Trocando regiões</a></li>
 <li><a href="#_1_2_invertendo_regiões">1.2. Invertendo Regiões</a></li>
 <li><a href="#_1_3_trocando_regiões">1.3. Trocando Regiões</a></li>
 </ul>
@@ -627,6 +628,67 @@ cv::waitKey();</code></pre>
 </div>
 <div class="title">Figure 3. Saída - Lena_negativo.png</div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_1_2_trocando_regiões">1.2. Trocando regiões</h3>
+<div class="paragraph text-justify">
+<p>O programa <a href="#trocaregioes">trocaregioes.cpp</a> troca os quadrantes em diagonal na imagem.</p>
+</div>
+<div class="listingblock">
+<div class="title">trocaregioes.cpp</div>
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b aux;
+
+  image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+  if(!image.data)
+    std::cout &lt;&lt; "nao abriu imagem.png" &lt;&lt; std::endl;
+
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+
+  for (int i = 0; i &lt; image.rows/2; i++) {
+    for (int j = 0; j &lt; image.cols/2; j++) {
+      aux = image.at&lt;cv::Vec3b&gt;(i,j);
+      image.at&lt;cv::Vec3b&gt;(i,j) = image.at&lt;cv::Vec3b&gt;(i+image.rows/2,j+image.cols/2);
+      image.at&lt;cv::Vec3b&gt;(i+image.rows/2,j+image.cols/2) = aux;
+
+      aux = image.at&lt;cv::Vec3b&gt;(i+image.rows/2,j);
+      image.at&lt;cv::Vec3b&gt;(i+image.rows/2,j) = image.at&lt;cv::Vec3b&gt;(i,j+image.cols/2);
+      image.at&lt;cv::Vec3b&gt;(i,j+image.cols/2) = aux;
+	}
+  }
+
+  cv::imshow("janela", image);
+  cv::waitKey();
+
+  cv::imwrite("Lena_trocaregioes.png", image);
+
+  return 0;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>A troca das regiões da imagem foi feita a partir do aninhamento de dois laços for que irão percorrer metade das linhas e metade das colunas da imagem.</p>
+</div>
+<div class="paragraph text-justify">
+<p>Dentro dos for’s, pode-se dizer que existem dois blocos de códigos, onde ambos fazem o uso da vairável auxilair trono.Num primeiro momento, a varíavel trono guarda as características do pixel do primeiro quadrante, esse pixel é substituído pelo pixel do quarto quadrante ao se acessar a posição (i+image.rows/2,j+image.cols/2) e então o pixel do quarto quadrante é atualizado ao receber o trono.</p>
+</div>
+<div class="paragraph text-justify">
+<p>Esse mesmo procedimento se repete no segundo bloco de código, mas dessa vez  o trono é utilizado para fazer a troca entre os elementos do segundo quadrante, acessados na posição (i,j+image.cols/2)  e do terceiro quadrante, acessados na posição (i+image.rows/2,j).</p>
+</div>
+<div class="paragraph text-justify">
+<p>Assim, ao fim das iterações do laço, as regiões são trocadas, como é possível averiguar na  <a href="#imagem">Lena_trocaregioes.png</a></p>
+</div>
+<div id="Lena_trocaregioes" class="imageblock png">
+<div class="content">
+<img src="PDI/1/lena_trocaregioes.png" alt="Lena_trocaregioes" width="512" height="512">
+</div>
+<div class="title">Figure 4. Saída - Lena_trocaregioes.png</div>
+</div>
 <div class="paragraph text-justify">
 <p>Primeiramente, foi proposto compilar e executar o programa <a href="#pixels">pixels.cpp</a>, que consiste em abrir uma imagem (<a href="#bolhas">bolhas.png</a>) e cobrir uma região com uma coloração qualquer.</p>
 </div>
@@ -634,7 +696,7 @@ cv::waitKey();</code></pre>
 <div class="content">
 <img src="PDI/2/bolhas.png" alt="bolhas" width="250" height="250">
 </div>
-<div class="title">Figure 4. Bolhas.png</div>
+<div class="title">Figure 5. Bolhas.png</div>
 </div>
 <div id="pixels" class="listingblock cpp">
 <div class="title">Código Fonte pixels.cpp</div>
@@ -734,7 +796,7 @@ int main(int, char**){
 <div class="content">
 <img src="PDI/2/cor_pixels.png" alt="bolhas_preenchidas" width="250" height="250">
 </div>
-<div class="title">Figure 5. Saída do Código</div>
+<div class="title">Figure 6. Saída do Código</div>
 </div>
 </div>
 <div class="sect2">
@@ -746,7 +808,7 @@ int main(int, char**){
 <div class="content">
 <img src="PDI/2/biel.png" alt="biel" width="250" height="250">
 </div>
-<div class="title">Figure 6. Biel.png</div>
+<div class="title">Figure 7. Biel.png</div>
 </div>
 <div id="regioes" class="listingblock">
 <div class="title">Código Fonte regioes.cpp</div>
@@ -855,7 +917,7 @@ int main(int, char**){
 <div class="content">
 <img src="PDI/2/bielinversa.png" alt="biel_inversa" width="250" height="250">
 </div>
-<div class="title">Figure 7. Exemplo de Biel Inversa</div>
+<div class="title">Figure 8. Exemplo de Biel Inversa</div>
 </div>
 </div>
 <div class="sect2">
@@ -975,7 +1037,7 @@ int main(int, char**){
 <div class="content">
 <img src="PDI/2/trocada.png" alt="biel_trocada" width="250" height="250">
 </div>
-<div class="title">Figure 8. Biel Trocada</div>
+<div class="title">Figure 9. Biel Trocada</div>
 </div>
 </div>
 </div>
@@ -983,7 +1045,7 @@ int main(int, char**){
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-30 16:08:17 -0300
+Last updated 2023-09-30 17:17:35 -0300
 </div>
 </div>
 </body>
