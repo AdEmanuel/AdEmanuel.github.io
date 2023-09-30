@@ -1,0 +1,358 @@
+= Página Pessoal - Adson Emanuel
+Processamento Digital de Imagens (DCA0445)
+:toc: left
+:toc-title: Sumário
+:doctype: book
+
+== Prefácio
+
+[.text-justify]
+Esse site contém a resolução dos exercícios que foram propostos na disciplina Processamento Digital de Imagens ofertada pelo Departamento de Engenharia de Computação e Automação da UFRN e ministrada pelo professor Agostinho Brito. As informações acerca da disciplina podem ser vista em: https://agostinhobritojr.github.io/tutorial/pdi/.
+
+Os exercícios foram desenvolvidos em C++, sendo necessário ter a biblioteca OpenCV https://opencv.org/. As regras de compilação dos códigos estão definidos no arquivo Makefile que está presente no site do curso. Dessa forma, para compilar e executar os códigos foram utilizados os seguintes comandos:
+
+[source,SHELL]
+----
+$ make <nome_arquivo>
+$ ./<nome_arquivo> <nome_da_imagem_ou_video>
+----
+
+== 1. Manipulando Pixels em uma Imagem
+
+=== 1.1. Preenchimento de Pixels
+
+[.text-justify]
+Primeiramente, foi proposto compilar e executar o programa <<pixels,pixels.cpp>>, que consiste em abrir uma imagem (<<bolhas,bolhas.png>>) e cobrir uma região com uma coloração qualquer.
+
+[#bolhas.png]
+.Bolhas.png
+image::PDI/2/bolhas.png[bolhas, 250, 250]
+
+[#pixels.cpp]
+.Código Fonte pixels.cpp
+[source,pixels]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  image= cv::imread("bolhas.png",cv::IMREAD_GRAYSCALE);
+  if(!image.data)
+    std::cout << "nao abriu bolhas.png" << std::endl;
+
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+
+  for(int i=200;i<210;i++){
+    for(int j=10;j<200;j++){
+      image.at<uchar>(i,j)=0;
+    }
+  }
+  
+  cv::imshow("janela", image);  
+  cv::waitKey();
+
+  image= cv::imread("bolhas.png",cv::IMREAD_COLOR);
+
+  val[0] = 0;   //B
+  val[1] = 0;   //G
+  val[2] = 255; //R
+  
+  for(int i=200;i<210;i++){
+    for(int j=10;j<200;j++){
+      image.at<cv::Vec3b>(i,j)=val;
+    }
+  }
+
+  cv::imshow("janela", image);  
+  cv::waitKey();
+
+  imwrite("cor_pixels.png", image);
+
+  return 0;
+}
+----
+
+[.text-justify]
+Inicialmente é aberta uma imagem (<<bolhas,bolhas.png>>, nesse caso) e é feita a verificação se a imagem foi aberta corretamente, para mostrar na tela. Caso não seja possível abrir a imagem corretamente, é mostrado um aviso de erro.
+
+[#pixels_incio.cpp]
+.Início do Código pixels.cpp
+[source,pixels_inicio]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  image= cv::imread("bolhas.png",cv::IMREAD_GRAYSCALE);
+  if(!image.data)
+    std::cout << "nao abriu bolhas.png" << std::endl;
+
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+----
+
+[.text-justify]
+Após isso, é realizado um preenchimento na cor preta (_image.at<uchar>(i,j)=0_), inicializando da linha 200 e coluna 10, e percorrendo até a linha 210 e coluna 200, a imagem resultante é mostrado em tela. Posteriormente, a mesma imagem é lida no formato colorido (_IMREAD_COLOR_) e, no mesmo local de preenchimento da cor preta, foi feito o preenchimento na cor vermelha, como indicado a imagem de <<bolhas_preenchidas,saída>>.
+
+[#pixels_final.cpp]
+.Final do Código pixels.cpp
+[source,pixels_meio]
+----
+for(int i=200;i<210;i++){
+    for(int j=10;j<200;j++){
+      image.at<uchar>(i,j)=0;
+    }
+  }
+  
+  cv::imshow("janela", image);  
+  cv::waitKey();
+
+  image= cv::imread("bolhas.png",cv::IMREAD_COLOR);
+
+  val[0] = 0;   //B
+  val[1] = 0;   //G
+  val[2] = 255; //R
+  
+  for(int i=200;i<210;i++){
+    for(int j=10;j<200;j++){
+      image.at<cv::Vec3b>(i,j)=val;
+    }
+  }
+----
+
+[#bolhas_preenchidas]
+.Saída do Código
+image::PDI/2/cor_pixels.png[bolhas_preenchidas, 250, 250]
+
+=== 1.2. Invertendo Regiões
+
+[.text-justify]
+Utilizando o mesmo código do programa anterior como base, foi realizada a inversão de cores em uma região (especificada pelo usuário), de modo que, ao rodar uma imagem (<<biel, biel.png>>, nesse caso) e atribuir dois pontos P1 e P2 localizados na imagem, a região retangular de vértices compostas por esses pontos passe a ter o valor negativo da imagem original na região especificada. O código completo é mostrado <<regioes,abaixo>>.
+
+[#biel]
+.Biel.png
+image::PDI/2/biel.png[biel, 250, 250]
+
+[#regioes]
+.Código Fonte regioes.cpp
+[source, regioes]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  int P1x, P1y, P2x, P2y;
+
+  image= cv::imread("biel.png",cv::IMREAD_GRAYSCALE);
+  if(!image.data)
+    std::cout << "nao abriu biel.png" << std::endl;
+
+  std::cout << "Insira um valor para a linha de P1" << std::endl;
+  std::cin >> P1x;
+
+  std::cout << "Insira um valor para a coluna de P1" << std::endl;
+  std::cin >> P1y;
+
+  std::cout << "Insira um valor para a linha de P2" << std::endl;
+  std::cin >> P2x;
+
+  std::cout << "Insira um valor para a coluna de P2" << std::endl;
+  std::cin >> P2y;
+
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+
+  for(int i=P1x;i<P2x;i++){
+    for(int j=P1y;j<P2y;j++){
+      image.at<uchar>(i,j)=255 - image.at<uchar>(i,j);
+    }
+  }
+  
+  cv::imshow("janela", image);  
+  cv::waitKey();
+
+  imwrite("bielinversa.png", image);
+
+  return 0;
+}
+----
+
+[.text-justify]
+Após a imagem ser aberta, é solicitado ao usuário o preenchimento das posições _x_ e _y_ dos pontos P1 e P2, respectivamente.
+
+[#regioes_inicio.cpp]
+.Início do Código regioes.cpp
+[source, regioes_inicio]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  int P1x, P1y, P2x, P2y;
+
+  image= cv::imread("biel.png",cv::IMREAD_GRAYSCALE);
+  if(!image.data)
+    std::cout << "nao abriu biel.png" << std::endl;
+
+  std::cout << "Insira um valor para a linha de P1" << std::endl;
+  std::cin >> P1x;
+
+  std::cout << "Insira um valor para a coluna de P1" << std::endl;
+  std::cin >> P1y;
+
+  std::cout << "Insira um valor para a linha de P2" << std::endl;
+  std::cin >> P2x;
+
+  std::cout << "Insira um valor para a coluna de P2" << std::endl;
+  std::cin >> P2y;
+----
+
+[.text-justify]
+Por fim, é mostrada a imagem original, e depois é realizada uma varredura dentro da região especificada pelos pontos, cada _pixel_ dentro da região recebe o seu valor invertido, obtido através da subtração do valor máximo que um _pixel_ pode assumir (255), menos o valor atual do _pixel_ analisado. Após percorrer toda a região retangular, a imagem final é mostrada.
+
+[#regioes_final.cpp]
+.Final do Código regioes.cpp
+[source, regioes_fim]
+----
+  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
+
+  for(int i=P1x;i<P2x;i++){
+    for(int j=P1y;j<P2y;j++){
+      image.at<uchar>(i,j)=255 - image.at<uchar>(i,j);
+    }
+  }
+    
+  cv::imshow("janela", image);  
+  cv::waitKey();
+
+  imwrite("bielinversa.png", image);
+
+  return 0;
+}
+----
+
+O resultado final pode ser visto na figura <<biel_inversa,abaixo>>.
+
+[#biel_inversa]
+.Exemplo de Biel Inversa
+image::PDI/2/bielinversa.png[biel_inversa, 250, 250]
+
+=== 1.3. Trocando Regiões
+
+[.text-justify]
+A terceira atividade relacionada a este tópico foi para trocar as regiões de uma figura, para isso, foi utilizada a imagem do <<#biel.png,Biel>> mostrada anteriormente. O código trocaregioes.cpp está listado abaixo.
+
+[#trocaregioes]
+.Código Fonte trocaregioes.cpp
+[source, trocaregioes.cpp]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  image= cv::imread("biel.png",cv::IMREAD_GRAYSCALE);
+  if(!image.data)
+    std::cout << "nao abriu biel.png" << std::endl;
+
+  cv:: Size tam = image.size();
+  
+  cv::imshow("janela 1", image);  
+  cv::waitKey();
+
+  cv:: Mat q1 = image(cv::Rect(0, 0, tam.width/2, tam.height/2));
+  cv:: Mat q2 = image(cv::Rect(0, tam.width/2, tam.width/2, tam.height/2));
+  cv:: Mat q3 = image(cv::Rect(tam.height/2, 0, tam.width/2, tam.height/2));
+  cv:: Mat q4 = image(cv::Rect(tam.height/2, tam.width/2, tam.width/2, tam.height/2));
+
+  cv::Mat l1, l2, imgtrocada;
+  cv::hconcat(q4, q2, l1);
+  cv::hconcat(q3, q1, l2);
+  cv::vconcat(l1, l2, imgtrocada);
+
+  cv::imshow("janela 2", imgtrocada);
+  cv::waitKey();
+
+  imwrite("trocada.png", imgtrocada);
+
+  return 0;
+}
+----
+
+[.text-justify]
+Esse código consiste em dividir a imagem em 4 quadrantes e inverter a posição deles (_q1_ com _q4_ e _q2_ com _q3_). Inicialmente, após a imagem ser aberta, é armazenado o tamanho da imagem, que indica a quantidade de linhas e colunas presentes na figura aberta. É feita a separação dos quadrantes da imagem da seguinte maneira:
+
+[.text-justify]
+* _q1_: Começa da primeira linha e primeira coluna da imagem (_0_, _0_) e se extende até a metade da figura (_nlinhas/2_, _ncolunas/2_);
+* _q2_: Começa na primeira linha e na metade das colunas da imagem (_0_, _ncolunas/2_), e vai até a metade das linhas e última coluna da imagem (_nlinhas/2_, _ncolunas/2_);
+* _q3_: Inicia na metade das linhas e primeira coluna da figura (_nlinhas/2_, _0_), e se extende até a metade da figura (_nlinhas/2_, _ncolunas/2_);
+* _q4_: Inicia na metade das linhas e metade das colunas da figura (_nlinhas/2_, _ncolunas/2_), e se extende até a última linha e última coluna da figura (_nlinhas/2_, _ncolunas/2_).
+
+[.text-justify]
+*Obs.: A distância sempre é dividida por 2 pelo fato do código estar indicando o tamanho que será percorrido para cortar os quadrantes, não necessariamente ao exato pixel inicial e final.*
+
+[#trocaregioes_inicio]
+.Início do Código trocaregioes.cpp
+[source, trocaregioes_inicio]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int, char**){
+  cv::Mat image;
+  cv::Vec3b val;
+
+  image= cv::imread("biel.png",cv::IMREAD_GRAYSCALE);
+  if(!image.data)
+    std::cout << "nao abriu biel.png" << std::endl;
+
+  cv:: Size tam = image.size();
+  
+  cv::imshow("janela 1", image);  
+  cv::waitKey();
+
+  cv:: Mat q1 = image(cv::Rect(0, 0, tam.width/2, tam.height/2));
+  cv:: Mat q2 = image(cv::Rect(0, tam.width/2, tam.width/2, tam.height/2));
+  cv:: Mat q3 = image(cv::Rect(tam.height/2, 0, tam.width/2, tam.height/2));
+  cv:: Mat q4 = image(cv::Rect(tam.height/2, tam.width/2, tam.width/2, tam.height/2));
+----
+
+[.text-justify]
+Para trocar os valores das regiões da figura, é utilizada a função de concatenação de matrizes, onde na primeira metade (_l1_) estarão os quadrantes _q2_ e _q4_, e na segunda metade (_l2_) estarão os quadrantes _q3_ e _q1_.
+
+[#trocaregioes_final]
+.Final do Código trocaregioes.cpp
+[source, trocaregioes_final_]
+----
+cv::Mat l1, l2, imgtrocada;
+  cv::hconcat(q4, q2, l1);
+  cv::hconcat(q3, q1, l2);
+  cv::vconcat(l1, l2, imgtrocada);
+
+  cv::imshow("janela 2", imgtrocada);
+  cv::waitKey();
+
+  imwrite("trocada.png", imgtrocada);
+
+  return 0;
+}
+----
+
+[.text-justify]
+A imagem resultante do processo utilizando a imagem <<#biel, original>> é vista na figura <<#biel_trocada, abaixo>>.
+
+[#biel_trocada]
+.Biel Trocada
+image::PDI/2/trocada.png[biel_trocada, 250, 250]
