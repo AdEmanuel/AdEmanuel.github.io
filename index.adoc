@@ -160,10 +160,9 @@ image::PDI/2/terminal_regions.png[Lena, 512, 512]
 .Entrada - Lena.png
 image::PDI/2/Lena.png[Lena, 512, 512]
 
-[#Lena.png]
+[#Lena_negativo.png]
 .Saída - Lena_negativo.png
-image::PDI/2/lena_negativo.png[Lena, 512, 512]
-
+image::PDI/2/lena_negativo.png[Lena_negativo, 512, 512]
 
 [.text-justify]
 Primeiramente, foi proposto compilar e executar o programa <<pixels,pixels.cpp>>, que consiste em abrir uma imagem (<<bolhas,bolhas.png>>) e cobrir uma região com uma coloração qualquer.
