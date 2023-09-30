@@ -331,7 +331,7 @@ Dentro desses for’s, a vairável valFinal guarda as informações do pixels re
 No trecho seguinte, os nbits menos significativos de ValFinal são deslocados à esquerda. Como nbits é igual a 5, os bits que dizem respeito a imagem que está escondida passam a ocupar as três primeiras posições do vetor (a <<ilustração,ilustracao_desloc.png>> demostra como o deslocamento descrito ocorre). Então, imagemEscondida é atualizada com a valEscondida.  
 
 [#ilustracao_desloc.png]
-.Ilustração do deslocamento de bits feitos no código.
+.Ilustração do deslocamento de bits feito no código.
 image::PDI/2/ilustracao_desloc.png[bolhas, 388, 340]
 
 [.text-justify]
@@ -346,11 +346,11 @@ O resultado final pode ser visto a seguir.
 
 [#desafio-esteganografia.png]
 .Entrada - desafio-esteganografia.png
-image::PDI/1/desafio-esteganografia.png[desafio-esteganografia, 300, 400]
+image::PDI/2/desafio-esteganografia.png[desafio-esteganografia, 300, 400]
 
-[#i.png]
+[#im_recuperada.png]
 .Saída - im_recuperada.png
-image::PDI/1/im_recuperada.png[im_recuperada, 300, 400]
+image::PDI/2/im_recuperada.png[im_recuperada, 300, 400]
 
 [.text-justify]
 Primeiramente, foi proposto compilar e executar o programa <<pixels,pixels.cpp>>, que consiste em abrir uma imagem (<<bolhas,bolhas.png>>) e cobrir uma região com uma coloração qualquer.
