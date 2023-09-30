@@ -221,7 +221,7 @@ Assim, ao fim das iterações do laço, as regiões são trocadas, como é poss�
 
 [#Lena_trocaregioes.png]
 .Saída - Lena_trocaregioes.png
-image::PDI/1/lena_trocaregioes.png[Lena_trocaregioes, 512, 512]
+image::PDI/1/Lena_trocaregioes.png[Lena_trocaregioes, 512, 512]
 
 
 [.text-justify]
