@@ -119,7 +119,7 @@ cv::waitKey();
 .Salvando nova imagem
 [source, CPP]
 ----
-cv::imwrite("lena_negativo.png", image);
+cv::imwrite("biel_negativo.png", image);
 ----
 
 [.text-justify]
