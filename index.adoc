@@ -352,8 +352,36 @@ image::PDI/2/desafio-esteganografia.png[desafio-esteganografia, 300, 400]
 .Saída - im_recuperada.png
 image::PDI/2/im_recuperada.png[im_recuperada, 300, 400]
 
+== 3. Preenchendo regiões
+
+=== 3.1 Problemas com labeling
+
+[.text-justify]
+A técnica de *labeling* é um processo que consiste em atribuir rótulos únicos a regiões ou objetos de interesse em uma imagem. Nesse contexto, um dos algoritmos que pode ser utilizado para rotular uma imagem binária é o floodfill. Ele capaz de preencher uma área de uma imagem com uma cor específica ou um valor específico. 
+
+[.text-justify]
+No código exemplo labeling (presente no site da disciplina do Prof. Agostinho) é possível verificar que caso existam mais de 255 objetos na cena, o processo de rotulação poderá ficar comprometido.
+
+[.text-justify]
+Tal situação ocorre quando 256° está para ser rotulado e se dá pois, no caso em questão, o tipo de dado utilizado para representar os valores do pixel na posição (x,y) da imagem é um unsigned char e esse tipo de variável armazena 8 bits, ou seja, 255 valores. Dessa forma, depois de contados 255 objetos na cena, não há mais como rotular os próximos com algum tom de cinza, uma vez que a região a qual o pixel pertence é rotulada com tom de cinza igual ao número de contagem de objetos atual.
+
+[.text-justify]
+Para resolver esse problema uma possível solução é usar um tipo de dado que possua mais bits, permitindo assim, uma maior quantidade de rótulos. Um exemplo de tipo que pode ser implementado é uma matriz do tipo CV_16U, ao inves do uchar. Esse tipo de dado é capaz de armazenar 2bytes (16bits) o que permite que o intervalo de valores rotulado vá de 0 até 65535.
+
 [.text-justify]
 Primeiramente, foi proposto compilar e executar o programa <<pixels,pixels.cpp>>, que consiste em abrir uma imagem (<<bolhas,bolhas.png>>) e cobrir uma região com uma coloração qualquer.
+
+=== 3.2 Algoritmo de contagem com *floodfill*
+
+O programa <<recupera_imagem,recupera_imagem.cpp>>
+
+[#recupera_imagem]
+.recupera_imagem.cpp
+[source, CPP]
+----
+
+----
+
 
 [#bolhas.png]
 .Bolhas.png
