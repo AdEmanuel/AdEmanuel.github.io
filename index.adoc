@@ -522,7 +522,7 @@ for (int i = 0; i < height; i++) {
 ----
 
 [.text-justify]
-A mesma ideia descrita é empregada no segundo for, mas dessa vez as iterações são feitas sobre o comprimeiro da imagem e são verificados os pixels que estão na borda superior, por meio da coordenada _(0, j)_, e na borda inferior, por meio da coordenada _(height - 1, j)_. Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<<Cena sem bolhas nas bordas,sem_bolhas_nas_bordas>>)
+A mesma ideia descrita é empregada no segundo for, mas dessa vez as iterações são feitas sobre o comprimeiro da imagem e são verificados os pixels que estão na borda superior, por meio da coordenada _(0, j)_, e na borda inferior, por meio da coordenada _(height - 1, j)_. Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<<sem_bolhas_nas_bordas,Cena sem bolhas nas bordas>>)
 
 [source,CPP]
 ----
