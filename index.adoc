@@ -182,15 +182,15 @@ Um exemplo de execução do programa pode ser visto a seguir.
 
 [terminal_regions.png]
 .Terminal: regions.cpp
-image::PDI/1/terminal_regions.png[terminal_regions, 1030, 173]
+image::PDI/1/terminal_regions.png[terminal_regions, 627, 122]
 
 [#biel.png]
 .Entrada - biel.png
-image::PDI/1/biel.png[Lena, 512, 512]
+image::PDI/1/biel.png[Lena, 256, 256]
 
 [#biel_negativo.png]
 .Saída - biel_negativo.png
-image::PDI/1/biel_negativo.png[biel_negativo, 512, 512]
+image::PDI/1/biel_negativo.png[biel_negativo, 256, 256]
 
 === 1.2. Trocando regiões
 
