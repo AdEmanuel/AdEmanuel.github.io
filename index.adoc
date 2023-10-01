@@ -550,7 +550,7 @@ cv::waitKey();
 image::PDI/3/sem_bolhas_nas_bordas.png[sem_bolhas_nas_bordas, 250, 250]
 
 [.text-justify]
-Em seguida, buscando contar a quantidade de bolhas com buraco, foi mudada a cor de fundo da imagem para um tom de cinza arbritário, como é possível ver na Figura <<cor_de_fundo_alterada,cor_de_fundo_alterada.png>>. Com isso, apenas os buracos ficaram com a cor preta e então, ao se percorrer a imagem e encontrar essa cor, incrementasse o contador de bolhas com buraco e aplica-se o fllodfill para deixar a bolha toda branca <<bolhas_brancas,bolhas_brancas.png>>
+Em seguida, buscando contar a quantidade de bolhas com buraco, foi mudada a cor de fundo da imagem para um tom de cinza arbritário, como é possível ver na Figura <<cor_de_fundo_alterada,cor_de_fundo_alterada>>. Com isso, apenas os buracos ficaram com a cor preta e então, ao se percorrer a imagem e encontrar essa cor, incrementasse o contador de bolhas com buraco e aplica-se o fllodfill para deixar a bolha toda branca <<bolhas_brancas,bolhas_brancas.png>>
 
 [source,CPP]
 ----
