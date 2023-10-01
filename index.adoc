@@ -211,7 +211,7 @@ int main(int, char**){
 A troca das regiões da imagem foi feita a partir do aninhamento de dois laços for que irão percorrer metade das linhas e metade das colunas da imagem. 
 
 [.text-justify]
-Dentro dos for’s, pode-se dizer que existem dois blocos de códigos, onde ambos fazem o uso da vairável auxilair trono.Num primeiro momento, a varíavel trono guarda as características do pixel do primeiro quadrante, esse pixel é substituído pelo pixel do quarto quadrante ao se acessar a posição (i+image.rows/2,j+image.cols/2) e então o pixel do quarto quadrante é atualizado ao receber o trono. 
+Dentro dos for’s, pode-se dizer que existem dois blocos de códigos, onde ambos fazem o uso da vairável auxilair trono. Num primeiro momento, a varíavel trono guarda as características do pixel do primeiro quadrante, esse pixel é substituído pelo pixel do quarto quadrante ao se acessar a posição (i+image.rows/2,j+image.cols/2) e então o pixel do quarto quadrante é atualizado ao receber o trono. 
 
 [.text-justify]
 Esse mesmo procedimento se repete no segundo bloco de código, mas dessa vez  o trono é utilizado para fazer a troca entre os elementos do segundo quadrante, acessados na posição (i,j+image.cols/2)  e do terceiro quadrante, acessados na posição (i+image.rows/2,j). 
@@ -357,16 +357,16 @@ image::PDI/2/im_recuperada.png[im_recuperada, 300, 400]
 === 3.1 Problemas com labeling
 
 [.text-justify]
-A técnica de *labeling* é um processo que consiste em atribuir rótulos únicos a regiões ou objetos de interesse em uma imagem. Nesse contexto, um dos algoritmos que pode ser utilizado para rotular uma imagem binária é o floodfill. Ele capaz de preencher uma área de uma imagem com uma cor específica ou um valor específico. 
+A técnica de *labeling* é um processo que consiste em atribuir rótulos únicos a regiões ou objetos de interesse em uma imagem. Nesse contexto, um dos algoritmos que pode ser utilizado para rotular uma imagem binária é o floodfill. Ele é capaz de preencher a área de uma imagem com uma cor específica ou um valor específico. 
 
 [.text-justify]
-No código exemplo labeling (presente no site da disciplina do Prof. Agostinho) é possível verificar que caso existam mais de 255 objetos na cena, o processo de rotulação poderá ficar comprometido.
+No código exemplo _labeling.cpp_ (presente no site da disciplina do Prof. Agostinho) é possível verificar que caso existam mais de 255 objetos na cena, o processo de rotulação poderá ficar comprometido.
 
 [.text-justify]
-Tal situação ocorre quando 256° está para ser rotulado e se dá pois, no caso em questão, o tipo de dado utilizado para representar os valores do pixel na posição (x,y) da imagem é um unsigned char e esse tipo de variável armazena 8 bits, ou seja, 255 valores. Dessa forma, depois de contados 255 objetos na cena, não há mais como rotular os próximos com algum tom de cinza, uma vez que a região a qual o pixel pertence é rotulada com tom de cinza igual ao número de contagem de objetos atual.
+Tal situação ocorre quando 256° elemento está para ser rotulado e se dá pois, no caso em questão, o tipo de dado utilizado para representar os valores do pixel na posição (x,y) da imagem é um unsigned char e esse tipo de variável armazena 8 bits, ou seja, 255 valores. Dessa forma, depois de contados 255 objetos na cena, não há mais como rotular os próximos com algum tom de cinza, uma vez que a região a qual o pixel pertence é rotulada com tom de cinza igual ao número de contagem de objetos atual.
 
 [.text-justify]
-Para resolver esse problema uma possível solução é usar um tipo de dado que possua mais bits, permitindo assim, uma maior quantidade de rótulos. Um exemplo de tipo que pode ser implementado é uma matriz do tipo CV_16U, ao inves do uchar. Esse tipo de dado é capaz de armazenar 2bytes (16bits) o que permite que o intervalo de valores rotulado vá de 0 até 65535.
+Para resolver esse problema uma possível solução é usar um tipo de dado que possua mais bits, permitindo assim, uma maior quantidade de rótulos. Um exemplo de tipo que pode ser implementado é uma matriz do tipo CV_16U, ao inves do uchar. Esse tipo de dado é capaz de armazenar 2 bytes (16 bits) o que permite que o intervalo de valores rotulado vá de 0 até 65535.
 
 === 3.2 Algoritmo de contagem com *floodfill*
 
@@ -456,6 +456,10 @@ int main(int argc, char** argv) {
             }
         }
     }
+
+    cv::imshow("image", image);
+    cv::imwrite("bolhas_brancas.png", image);
+    cv::waitKey();
 	
     p.x = 0;
     p.y = 0;
@@ -546,7 +550,7 @@ cv::waitKey();
 image::PDI/3/sem_bolhas_nas_bordas.png[sem_bolhas_nas_bordas, 250, 250]
 
 [.text-justify]
-Em seguida, buscando contar a quantidade de bolhas com buraco, foi mudada a cor de fundo da imagem para um tom de cinza arbritário, como é possível ver na Figura <<cor_de_fundo_alterada,cor_de_fundo_alterada.png>>. Com isso, apenas os buracos ficaram com a cor preta e então ao se percorrer a imagem e encontrar a cor preta, incrementasse o contador de bolhas com buraco e aplica-se o fllodfill para deixar a bolha toda branca. 
+Em seguida, buscando contar a quantidade de bolhas com buraco, foi mudada a cor de fundo da imagem para um tom de cinza arbritário, como é possível ver na Figura <<cor_de_fundo_alterada,cor_de_fundo_alterada.png>>. Com isso, apenas os buracos ficaram com a cor preta e então, ao se percorrer a imagem e encontrar essa cor, incrementasse o contador de bolhas com buraco e aplica-se o fllodfill para deixar a bolha toda branca <<bolhas_brancas,bolhas_brancas.png>>
 
 [source,CPP]
 ----
@@ -570,11 +574,19 @@ for (int i = 0; i < height; i++){
         }
     }
 }
+
+cv::imshow("image", image);
+cv::imwrite("bolhas_brancas.png", image);
+cv::waitKey();
 ----
 
 [#cor_de_fundo_alterada.png]
 .Cena cor de fundo alterada
 image::PDI/3/cor_de_fundo_alterada.png[cor_de_fundo_alterada, 250, 250]
+
+[#bolhas_brancas.png]
+.Cena com as bolhas brancas
+image::PDI/3/bolhas_brancas.png[bolhas_brancas, 250, 250]
 
 [.text-justify]
 Logo após, a cor de fundo da imagem é mudada de volta para o preto (Figura <<bolhas_sem_buracos,bolhas_sem_buracos.png>>) e obtem-se o número total de bolhas. 
