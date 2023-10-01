@@ -494,10 +494,10 @@ int main(int argc, char** argv) {
 
 [#bolhas.png]
 .Bolhas.png
-image::PDI/2/bolhas.png[bolhas, 250, 250]
+image::PDI/3/bolhas.png[bolhas, 250, 250]
 
 [.text-justify]
-O código abaixo diz respeito ao tratamento das bolhas que estão nas bordas da imagem. O primeiro for itera sobrea a altura e verificações são feitas em todos os pixels que estão na borda lateral esquerda, por meio da coordenada _(i, 0)_, e na borda lateral direita, por meio da coordenada _(i, width - 1)_. Se um pixel branco for encontrado em uma dessas extremidades, ele é usado como ponto de partida para a função floodfill que preenche essa região com valor 0 (preto). Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<<bolhas,bolhas.png>>)
+O código abaixo diz respeito ao tratamento das bolhas que estão nas bordas da imagem. O primeiro for itera sobrea a altura e verificações são feitas em todos os pixels que estão na borda lateral esquerda, por meio da coordenada _(i, 0)_, e na borda lateral direita, por meio da coordenada _(i, width - 1)_. Se um pixel branco for encontrado em uma dessas extremidades, ele é usado como ponto de partida para a função floodfill que preenche essa região com valor 0 (preto).
 
 [source,CPP]
 ----
@@ -607,6 +607,10 @@ for (int i = 0; i < height; i++){
 }
 ----
 
+[#bolhas_sem_buracos.png]
+.Cena com bolhas preenchidas
+image::PDI/3/bolhas_sem_buracos.png[bolhas_sem_buracos, 250, 250]
+
 Por fim, são printadas no terminal informações referentes a quantidade de bolhas com e sem buracos e obtem-se a imagem final do labeling para contagem de objetos.
 
 [source,CPP]
@@ -618,7 +622,7 @@ cv::waitKey();
 ----
 [#terminal_labeling2.png]
 .Terminal - labeling2.cpp
-image::PDI/3/terminal_labeling2.png[terminal_labeling2, 250, 250]
+image::PDI/3/terminal_labeling2.png[terminal_labeling2, 710, 100]
 
 [#labeling2_out.png]
 .Saída final - Labeling2
