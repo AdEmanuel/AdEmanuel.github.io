@@ -505,7 +505,7 @@ int main(int, char**){
   cv::Mat image;
   cv::Vec3b val;
 
-  image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+  image= cv::imread("biel.png",cv::IMREAD_COLOR);
   if(!image.data)
     std::cout &lt;&lt; "A imagem não foi aberta" &lt;&lt; std::endl;
 
@@ -516,16 +516,30 @@ int main(int, char**){
 
   std::cout &lt;&lt; "O tamanho da imagem, em pixels, que será editada é: " &lt;&lt; cols &lt;&lt; "x" &lt;&lt; rows &lt;&lt; std::endl;
 
-  std::cout &lt;&lt; "Dessa forma, defina, respectivamente, as coordenadas x e y dos pontos P1 e P2." &lt;&lt; std::endl;
-  std::cout &lt;&lt; "x1 =";
-  std::cin &gt;&gt; x1;
-  std::cout &lt;&lt; "y1 = ";
-  std::cin &gt;&gt; y1;
+  while (true){
+    std::cout &lt;&lt; "Dessa forma, defina, respectivamente, as coordenadas x e y dos pontos P1 e P2." &lt;&lt; std::endl;
+	std::cout &lt;&lt; "x1 = ";
+	std::cin &gt;&gt; x1;
+	std::cout &lt;&lt; "y1 = ";
+	std::cin &gt;&gt; y1;
 
-  std::cout &lt;&lt; "x2 = ";
-  std::cin &gt;&gt; x2;
-  std::cout &lt;&lt; "y2 = ";
-  std::cin &gt;&gt; y2;
+
+    if (x1 &lt; 0 || x1 &gt;= cols || y1 &lt; 0 || y1 &gt;= rows) {
+      std::cout &lt;&lt; "Pelo menos um dos pontos está fora dos limites da imagem." &lt;&lt; std::endl;
+    } else {
+      std::cout &lt;&lt; "x2 = ";
+      std::cin &gt;&gt; x2;
+      std::cout &lt;&lt; "y2 = ";
+      std::cin &gt;&gt; y2;
+
+      // Verifique se os pontos formam um retângulo válido
+      if (x2 &lt; 0 || x2 &gt;= cols || y2 &lt; 0 || y2 &gt;= rows || x1 &gt;= x2 || y1 &gt;= y2) {
+        std::cout &lt;&lt; "Os pontos não formam um retângulo válido." &lt;&lt; std::endl;
+      } else {
+        break;  // As coordenadas são válidas, saia do loop
+      }
+    }
+  }
 
   cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
 
@@ -543,7 +557,7 @@ int main(int, char**){
   cv::imshow("janela", image);
   cv::waitKey();
 
-  cv::imwrite("lena_negativo.png", image);
+  cv::imwrite("biel_negativo.png", image);
 
   return 0;
 }</code></pre>
@@ -555,7 +569,7 @@ int main(int, char**){
 <div class="listingblock">
 <div class="title">Leitura e Verificação</div>
 <div class="content">
-<pre class="highlight"><code class="language-CPP" data-lang="CPP">image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">image= cv::imread("biel.png",cv::IMREAD_COLOR);
 if(!image.data)
   std::cout &lt;&lt; "A imagem não foi aberta" &lt;&lt; std::endl;</code></pre>
 </div>
@@ -576,27 +590,41 @@ cv::waitKey();</code></pre>
 </div>
 </div>
 <div class="paragraph text-justify">
-<p>Tratando agora do restante da implementação, os vértices do retângulo onde será aplicado o negativo são solicitados ao usuário de maneira convencional por meio do uso de cin’s e cout’s. Entretanto, é feita antes a aquisição dos pontos de largura e altura da imagem, pois é interessante que o usuário saiba quais os limites dela, uma vez que ele deve fornecer pontos que respeitem tais limites.</p>
+<p>Tratando agora do restante da implementação, os pontos máximos de largura e altura da imagem são obtidos e printados, para que o usuário saiba quais os limites ele deve respeitar ao inserir os pontos. Após isso, os vértices do retângulo onde será aplicado o negativo são solicitados ao usuário. Caso ele forneça pontos que estejam fora dos limites da imagem ou que não formem um retângulo válido o programa solicita que ele forneça novos pontos.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-CPP" data-lang="CPP">int cols, rows, x1, x2, y1 ,y2;
 
-  cols = image.cols;
-  rows = image.rows;
+cols = image.cols;
+rows = image.rows;
 
-  std::cout &lt;&lt; "O tamanho da imagem, em pixels, que será editada é: " &lt;&lt; cols &lt;&lt; "x" &lt;&lt; rows &lt;&lt; std::endl;
+std::cout &lt;&lt; "O tamanho da imagem, em pixels, que será editada é: " &lt;&lt; cols &lt;&lt; "x" &lt;&lt; rows &lt;&lt; std::endl;
 
+while (true){
   std::cout &lt;&lt; "Dessa forma, defina, respectivamente, as coordenadas x e y dos pontos P1 e P2." &lt;&lt; std::endl;
-  std::cout &lt;&lt; "x1 =";
+  std::cout &lt;&lt; "x1 = ";
   std::cin &gt;&gt; x1;
   std::cout &lt;&lt; "y1 = ";
   std::cin &gt;&gt; y1;
 
-  std::cout &lt;&lt; "x2 = ";
-  std::cin &gt;&gt; x2;
-  std::cout &lt;&lt; "y2 = ";
-  std::cin &gt;&gt; y2;</code></pre>
+  // Verifique se os pontos estão dentro dos limites da imagem
+  if (x1 &lt; 0 || x1 &gt;= cols || y1 &lt; 0 || y1 &gt;= rows) {
+    std::cout &lt;&lt; "Pelo menos um dos pontos está fora dos limites da imagem." &lt;&lt; std::endl;
+  } else {
+    std::cout &lt;&lt; "x2 = ";
+    std::cin &gt;&gt; x2;
+    std::cout &lt;&lt; "y2 = ";
+    std::cin &gt;&gt; y2;
+
+    // Verifique se os pontos formam um retângulo válido
+    if (x2 &lt; 0 || x2 &gt;= cols || y2 &lt; 0 || y2 &gt;= rows || x1 &gt;= x2 || y1 &gt;= y2) {
+      std::cout &lt;&lt; "Os pontos não formam um retângulo válido." &lt;&lt; std::endl;
+    } else {
+      break;  // As coordenadas são válidas, saia do loop
+    }
+  }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph text-justify">
@@ -625,17 +653,17 @@ cv::waitKey();</code></pre>
 </div>
 <div class="title">Figure 1. Terminal: regions.cpp</div>
 </div>
-<div id="Lena" class="imageblock png">
+<div id="biel" class="imageblock png">
 <div class="content">
-<img src="PDI/1/Lena.png" alt="Lena" width="512" height="512">
+<img src="PDI/1/biel.png" alt="Lena" width="512" height="512">
 </div>
-<div class="title">Figure 2. Entrada - Lena.png</div>
+<div class="title">Figure 2. Entrada - biel.png</div>
 </div>
-<div id="Lena_negativo" class="imageblock png">
+<div id="biel_negativo" class="imageblock png">
 <div class="content">
-<img src="PDI/1/lena_negativo.png" alt="Lena_negativo" width="512" height="512">
+<img src="PDI/1/biel_negativo.png" alt="biel_negativo" width="512" height="512">
 </div>
-<div class="title">Figure 3. Saída - Lena_negativo.png</div>
+<div class="title">Figure 3. Saída - biel_negativo.png</div>
 </div>
 </div>
 <div class="sect2">
@@ -1153,7 +1181,7 @@ cv::waitKey();</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-10-01 11:14:35 -0300
+Last updated 2023-10-01 15:51:47 -0300
 </div>
 </div>
 </body>

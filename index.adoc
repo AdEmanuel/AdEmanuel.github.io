@@ -38,7 +38,7 @@ int main(int, char**){
   cv::Mat image;
   cv::Vec3b val;
 
-  image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+  image= cv::imread("biel.png",cv::IMREAD_COLOR);
   if(!image.data)
     std::cout << "A imagem não foi aberta" << std::endl;
   
@@ -48,17 +48,31 @@ int main(int, char**){
   rows = image.rows;
 
   std::cout << "O tamanho da imagem, em pixels, que será editada é: " << cols << "x" << rows << std::endl;
-  
-  std::cout << "Dessa forma, defina, respectivamente, as coordenadas x e y dos pontos P1 e P2." << std::endl;
-  std::cout << "x1 =";
-  std::cin >> x1;
-  std::cout << "y1 = ";
-  std::cin >> y1;
-  
-  std::cout << "x2 = ";
-  std::cin >> x2;
-  std::cout << "y2 = ";
-  std::cin >> y2;
+
+  while (true){
+    std::cout << "Dessa forma, defina, respectivamente, as coordenadas x e y dos pontos P1 e P2." << std::endl;
+	std::cout << "x1 = ";
+	std::cin >> x1;
+	std::cout << "y1 = ";
+	std::cin >> y1;
+	
+
+    if (x1 < 0 || x1 >= cols || y1 < 0 || y1 >= rows) {
+      std::cout << "Pelo menos um dos pontos está fora dos limites da imagem." << std::endl;
+    } else {
+      std::cout << "x2 = ";
+      std::cin >> x2;
+      std::cout << "y2 = ";
+      std::cin >> y2;
+
+      // Verifique se os pontos formam um retângulo válido
+      if (x2 < 0 || x2 >= cols || y2 < 0 || y2 >= rows || x1 >= x2 || y1 >= y2) {
+        std::cout << "Os pontos não formam um retângulo válido." << std::endl;
+      } else {
+        break;  // As coordenadas são válidas, saia do loop
+      }
+    }  
+  }
   
   cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
 
@@ -76,7 +90,7 @@ int main(int, char**){
   cv::imshow("janela", image);  
   cv::waitKey();
   
-  cv::imwrite("lena_negativo.png", image);
+  cv::imwrite("biel_negativo.png", image);
   
   return 0;
 }
@@ -88,7 +102,7 @@ Num primeiro momento se faz importante observar a presença de trechos de códig
 .Leitura e Verificação
 [source, CPP]
 ----
-image= cv::imread("Lena.png",cv::IMREAD_COLOR);
+image= cv::imread("biel.png",cv::IMREAD_COLOR);
 if(!image.data)
   std::cout << "A imagem não foi aberta" << std::endl;
 ----
@@ -109,27 +123,41 @@ cv::imwrite("lena_negativo.png", image);
 ----
 
 [.text-justify]
-Tratando agora do restante da implementação, os vértices do retângulo onde será aplicado o negativo são solicitados ao usuário de maneira convencional por meio do uso de cin’s e cout’s. Entretanto, é feita antes a aquisição dos pontos de largura e altura da imagem, pois é interessante que o usuário saiba quais os limites dela, uma vez que ele deve fornecer pontos que respeitem tais limites.
+Tratando agora do restante da implementação, os pontos máximos de largura e altura da imagem são obtidos e printados, para que o usuário saiba quais os limites ele deve respeitar ao inserir os pontos. Após isso, os vértices do retângulo onde será aplicado o negativo são solicitados ao usuário. Caso ele forneça pontos que estejam fora dos limites da imagem ou que não formem um retângulo válido o programa solicita que ele forneça novos pontos.
 
 [source, CPP]
 ----
 int cols, rows, x1, x2, y1 ,y2;
   
-  cols = image.cols;
-  rows = image.rows;
+cols = image.cols;
+rows = image.rows;
 
-  std::cout << "O tamanho da imagem, em pixels, que será editada é: " << cols << "x" << rows << std::endl;
-  
+std::cout << "O tamanho da imagem, em pixels, que será editada é: " << cols << "x" << rows << std::endl;
+
+while (true){
   std::cout << "Dessa forma, defina, respectivamente, as coordenadas x e y dos pontos P1 e P2." << std::endl;
-  std::cout << "x1 =";
+  std::cout << "x1 = ";
   std::cin >> x1;
   std::cout << "y1 = ";
   std::cin >> y1;
-  
-  std::cout << "x2 = ";
-  std::cin >> x2;
-  std::cout << "y2 = ";
-  std::cin >> y2;
+	
+  // Verifique se os pontos estão dentro dos limites da imagem
+  if (x1 < 0 || x1 >= cols || y1 < 0 || y1 >= rows) {
+    std::cout << "Pelo menos um dos pontos está fora dos limites da imagem." << std::endl;
+  } else {
+    std::cout << "x2 = ";
+    std::cin >> x2;
+    std::cout << "y2 = ";
+    std::cin >> y2;
+
+    // Verifique se os pontos formam um retângulo válido
+    if (x2 < 0 || x2 >= cols || y2 < 0 || y2 >= rows || x1 >= x2 || y1 >= y2) {
+      std::cout << "Os pontos não formam um retângulo válido." << std::endl;
+    } else {
+      break;  // As coordenadas são válidas, saia do loop
+    }
+  }  
+}
 ----
 
 [.text-justify]
@@ -156,13 +184,13 @@ Um exemplo de execução do programa pode ser visto a seguir.
 .Terminal: regions.cpp
 image::PDI/1/terminal_regions.png[terminal_regions, 1030, 173]
 
-[#Lena.png]
-.Entrada - Lena.png
-image::PDI/1/Lena.png[Lena, 512, 512]
+[#biel.png]
+.Entrada - biel.png
+image::PDI/1/biel.png[Lena, 512, 512]
 
-[#Lena_negativo.png]
-.Saída - Lena_negativo.png
-image::PDI/1/lena_negativo.png[Lena_negativo, 512, 512]
+[#biel_negativo.png]
+.Saída - biel_negativo.png
+image::PDI/1/biel_negativo.png[biel_negativo, 512, 512]
 
 === 1.2. Trocando regiões
 
