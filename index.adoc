@@ -373,15 +373,6 @@ Primeiramente, foi proposto compilar e executar o programa <<pixels,pixels.cpp>>
 
 === 3.2 Algoritmo de contagem com *floodfill*
 
-O programa <<recupera_imagem,recupera_imagem.cpp>>
-
-[#recupera_imagem]
-.recupera_imagem.cpp
-[source, CPP]
-----
-
-----
-
 
 [#bolhas.png]
 .Bolhas.png

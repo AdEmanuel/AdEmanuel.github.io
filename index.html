@@ -457,6 +457,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_2_1_desafio_esteganografia">2.1 Desafio Esteganografia</a></li>
 </ul>
 </li>
+<li><a href="#_3_preenchendo_regiões">3. Preenchendo regiões</a>
+<ul class="sectlevel2">
+<li><a href="#_3_1_problemas_com_labeling">3.1 Problemas com labeling</a></li>
+<li><a href="#_3_2_algoritmo_de_contagem_com_floodfill">3.2 Algoritmo de contagem com <strong>floodfill</strong></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -832,9 +838,32 @@ nome_imagem += ".png";</code></pre>
 </div>
 <div class="title">Figure 7. Saída - im_recuperada.png</div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_3_preenchendo_regiões">3. Preenchendo regiões</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_3_1_problemas_com_labeling">3.1 Problemas com labeling</h3>
+<div class="paragraph text-justify">
+<p>A técnica de <strong>labeling</strong> é um processo que consiste em atribuir rótulos únicos a regiões ou objetos de interesse em uma imagem. Nesse contexto, um dos algoritmos que pode ser utilizado para rotular uma imagem binária é o floodfill. Ele capaz de preencher uma área de uma imagem com uma cor específica ou um valor específico.</p>
+</div>
+<div class="paragraph text-justify">
+<p>No código exemplo labeling (presente no site da disciplina do Prof. Agostinho) é possível verificar que caso existam mais de 255 objetos na cena, o processo de rotulação poderá ficar comprometido.</p>
+</div>
+<div class="paragraph text-justify">
+<p>Tal situação ocorre quando 256° está para ser rotulado e se dá pois, no caso em questão, o tipo de dado utilizado para representar os valores do pixel na posição (x,y) da imagem é um unsigned char e esse tipo de variável armazena 8 bits, ou seja, 255 valores. Dessa forma, depois de contados 255 objetos na cena, não há mais como rotular os próximos com algum tom de cinza, uma vez que a região a qual o pixel pertence é rotulada com tom de cinza igual ao número de contagem de objetos atual.</p>
+</div>
+<div class="paragraph text-justify">
+<p>Para resolver esse problema uma possível solução é usar um tipo de dado que possua mais bits, permitindo assim, uma maior quantidade de rótulos. Um exemplo de tipo que pode ser implementado é uma matriz do tipo CV_16U, ao inves do uchar. Esse tipo de dado é capaz de armazenar 2bytes (16bits) o que permite que o intervalo de valores rotulado vá de 0 até 65535.</p>
+</div>
 <div class="paragraph text-justify">
 <p>Primeiramente, foi proposto compilar e executar o programa <a href="#pixels">pixels.cpp</a>, que consiste em abrir uma imagem (<a href="#bolhas">bolhas.png</a>) e cobrir uma região com uma coloração qualquer.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_3_2_algoritmo_de_contagem_com_floodfill">3.2 Algoritmo de contagem com <strong>floodfill</strong></h3>
 <div id="bolhas" class="imageblock png">
 <div class="content">
 <img src="PDI/2/bolhas.png" alt="bolhas" width="250" height="250">
@@ -893,7 +922,7 @@ int main(int, char**){
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-30 20:52:42 -0300
+Last updated 2023-09-30 21:54:53 -0300
 </div>
 </div>
 </body>
