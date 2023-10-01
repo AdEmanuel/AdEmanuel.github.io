@@ -368,59 +368,258 @@ Tal situação ocorre quando 256° está para ser rotulado e se dá pois, no cas
 [.text-justify]
 Para resolver esse problema uma possível solução é usar um tipo de dado que possua mais bits, permitindo assim, uma maior quantidade de rótulos. Um exemplo de tipo que pode ser implementado é uma matriz do tipo CV_16U, ao inves do uchar. Esse tipo de dado é capaz de armazenar 2bytes (16bits) o que permite que o intervalo de valores rotulado vá de 0 até 65535.
 
-[.text-justify]
-Primeiramente, foi proposto compilar e executar o programa <<pixels,pixels.cpp>>, que consiste em abrir uma imagem (<<bolhas,bolhas.png>>) e cobrir uma região com uma coloração qualquer.
-
 === 3.2 Algoritmo de contagem com *floodfill*
 
+O programa <<labeling2,labeling2.cpp>> identifica regiões com ou sem buracos internos que existam na cena (<<bolhas,bolhas.png>>) e realiza a contagem desses elementos.
+
+[#labeling2]
+.labeling2.cpp
+[source, CPP]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+int main(int argc, char** argv) {
+    cv::Mat image, realce;
+    int width, height;
+    int nobjects, nholes;
+	
+    cv::Point p;
+    image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
+
+    if (!image.data) {
+	std::cout << "imagem nao carregou corretamente\n";
+	return (-1);
+    }
+
+    width = image.cols;
+    height = image.rows;
+    std::cout << width << "x" << height << std::endl;
+
+    p.x = 0;
+    p.y = 0;
+	
+    //Lidando com buracos nas bordas
+    for (int i = 0; i < height; i++) {
+	if (image.at<uchar>(i, 0) == 255) {
+            p.x = 0;
+            p.y = i;
+            floodFill(image, p, 0);
+	}
+
+	if (image.at<uchar>(i, width - 1) == 255) {
+	    p.x = width - 1;
+	    p.y = i;
+	    floodFill(image, p, 0);
+	}
+    }
+	
+    for (int j = 0; j < width; j++) {
+        if (image.at<uchar>(0, j) == 255) {
+            p.x = j;
+	    p.y = 0;
+	    floodFill(image, p, 0);
+	}
+
+	if (image.at<uchar>(height - 1, j) == 255) {
+            p.x = j;
+	    p.y = height - 1;
+	    floodFill(image, p, 0);
+	}
+    }
+	
+    cv::imshow("image", image);
+    cv::imwrite("sem_bolhas_nas_bordas.png", image);
+    cv::waitKey();
+
+    p.x = 0;
+    p.y = 0;
+    cv::floodFill(image, p, 100);
+	
+    std::cout << "Aqui 2\n";
+	
+    cv::imshow("image", image);
+    cv::imwrite("cor_de_fundo_alterada.png", image);
+    cv::waitKey();
+	
+    nholes = 0;
+
+    for (int i = 0; i < height; i++){
+        for (int j = 0; j < width; j++){
+            if (image.at<uchar>(i, j) == 0){
+                p.x = j;
+                p.y = i;
+                nholes++;
+                cv::floodFill(image, p, 255);
+            }
+        }
+    }
+	
+    p.x = 0;
+    p.y = 0;
+    cv::floodFill(image, p, 0);
+	
+    cv::imshow("image", image);
+    cv::imwrite("bolhas_sem_buracos.png", image);
+    cv::waitKey();
+	
+    nobjects = 0;
+	
+    for (int i = 0; i < height; i++){
+        for (int j = 0; j < width; j++){
+            if (image.at<uchar>(i, j) == 255){
+                // achou um objeto
+                nobjects++;
+                // para o floodfill as coordenadas
+                // x e y são trocadas.
+                p.x = j;
+                p.y = i;
+                // preenche o objeto com o contador
+                cv::floodFill(image, p, nobjects);
+            }
+        }
+    }
+	
+    std::cout << "A figura tem " << nholes << " bolhas com buracos e " << nobjects - nholes << " bolhas sem buracos.\n";
+    std::cout << "Ao todo a figura possui " << nobjects << " bolhas\n";
+    cv::imshow("image", image);
+    cv::imwrite("labeling2.png", image);
+    cv::waitKey();
+	
+    return 0;
+}
+----
 
 [#bolhas.png]
 .Bolhas.png
 image::PDI/2/bolhas.png[bolhas, 250, 250]
 
-[#pixels.cpp]
-.Código Fonte pixels.cpp
-[source,pixels]
+[.text-justify]
+O código abaixo diz respeito ao tratamento das bolhas que estão nas bordas da imagem. O primeiro for itera sobrea a altura e verificações são feitas em todos os pixels que estão na borda lateral esquerda, por meio da coordenada _(i, 0)_, e na borda lateral direita, por meio da coordenada _(i, width - 1)_. Se um pixel branco for encontrado em uma dessas extremidades, ele é usado como ponto de partida para a função floodfill que preenche essa região com valor 0 (preto). Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<<bolhas,bolhas.png>>)
+
+[source,CPP]
 ----
-#include <iostream>
-#include <opencv2/opencv.hpp>
-
-int main(int, char**){
-  cv::Mat image;
-  cv::Vec3b val;
-
-  image= cv::imread("bolhas.png",cv::IMREAD_GRAYSCALE);
-  if(!image.data)
-    std::cout << "nao abriu bolhas.png" << std::endl;
-
-  cv::namedWindow("janela", cv::WINDOW_AUTOSIZE);
-
-  for(int i=200;i<210;i++){
-    for(int j=10;j<200;j++){
-      image.at<uchar>(i,j)=0;
+//Lidando com buracos nas bordas
+for (int i = 0; i < height; i++) {
+    if (image.at<uchar>(i, 0) == 255) {
+        p.x = 0;
+	p.y = i;
+	floodFill(image, p, 0);
     }
-  }
-  
-  cv::imshow("janela", image);  
-  cv::waitKey();
 
-  image= cv::imread("bolhas.png",cv::IMREAD_COLOR);
-
-  val[0] = 0;   //B
-  val[1] = 0;   //G
-  val[2] = 255; //R
-  
-  for(int i=200;i<210;i++){
-    for(int j=10;j<200;j++){
-      image.at<cv::Vec3b>(i,j)=val;
+    if (image.at<uchar>(i, width - 1) == 255) {
+        p.x = width - 1;
+	p.y = i;
+	floodFill(image, p, 0);
     }
-  }
-
-  cv::imshow("janela", image);  
-  cv::waitKey();
-
-  imwrite("cor_pixels.png", image);
-
-  return 0;
 }
 ----
+
+[.text-justify]
+A mesma ideia descrita é empregada no segundo for, mas dessa vez as iterações são feitas sobre o comprimeiro da imagem e são verificados os pixels que estão na borda superior, por meio da coordenada _(0, j)_, e na borda inferior, por meio da coordenada _(height - 1, j)_. Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<<sem_bolhas_nas_bordas,sem_bolhas_nas_bordas.png>>)
+
+[source,CPP]
+----
+for (int j = 0; j < width; j++) {
+    if (image.at<uchar>(0, j) == 255) {
+        p.x = j;
+	p.y = 0;
+	floodFill(image, p, 0);
+    }
+
+    if (image.at<uchar>(height - 1, j) == 255) {
+        p.x = j;
+	p.y = height - 1;
+	floodFill(image, p, 0);
+    }
+}
+
+cv::imshow("image", image);
+cv::imwrite("sem_bolhas_nas_bordas.png", image);
+cv::waitKey();
+----
+
+[#sem_bolhas_nas_bordas.png]
+.Cena sem bolhas nas bordas
+image::PDI/3/sem_bolhas_nas_bordas.png[sem_bolhas_nas_bordas, 250, 250]
+
+[.text-justify]
+Em seguida, buscando contar a quantidade de bolhas com buraco, foi mudada a cor de fundo da imagem para um tom de cinza arbritário, como é possível ver na Figura <<cor_de_fundo_alterada,cor_de_fundo_alterada.png>>. Com isso, apenas os buracos ficaram com a cor preta e então ao se percorrer a imagem e encontrar a cor preta, incrementasse o contador de bolhas com buraco e aplica-se o fllodfill para deixar a bolha toda branca. 
+
+[source,CPP]
+----
+p.x = 0;
+p.y = 0;
+cv::floodFill(image, p, 100);
+	
+cv::imshow("image", image);
+cv::imwrite("cor_de_fundo_alterada.png", image);
+cv::waitKey();
+	
+nholes = 0;
+	
+for (int i = 0; i < height; i++){
+    for (int j = 0; j < width; j++){
+        if (image.at<uchar>(i, j) == 0){
+            p.x = j;
+            p.y = i;
+            nholes++;
+            cv::floodFill(image, p, 255);
+        }
+    }
+}
+----
+
+[#cor_de_fundo_alterada.png]
+.Cena cor de fundo alterada
+image::PDI/3/cor_de_fundo_alterada.png[cor_de_fundo_alterada, 250, 250]
+
+[.text-justify]
+Logo após, a cor de fundo da imagem é mudada de volta para o preto (Figura <<bolhas_sem_buracos,bolhas_sem_buracos.png>>) e obtem-se o número total de bolhas. 
+
+[source,CPP]
+----
+p.x = 0;
+p.y = 0;
+cv::floodFill(image, p, 0);
+
+cv::imshow("image", image);
+cv::imwrite("bolhas_sem_buracos.png", image);
+cv::waitKey();
+	
+nobjects = 0;
+	
+for (int i = 0; i < height; i++){
+    for (int j = 0; j < width; j++){
+        if (image.at<uchar>(i, j) == 255){
+            // achou um objeto
+            nobjects++;
+            // para o floodfill as coordenadas
+            // x e y são trocadas.
+            p.x = j;
+            p.y = i;
+            // preenche o objeto com o contador
+            cv::floodFill(image, p, nobjects);
+        }
+    }
+}
+----
+
+Por fim, são printadas no terminal informações referentes a quantidade de bolhas com e sem buracos e obtem-se a imagem final do labeling para contagem de objetos.
+
+[source,CPP]
+----
+std::cout << "A figura tem " << nholes << " bolhas com buracos e " << nobjects - nholes << " bolhas sem buracos.\n";	std::cout << "Ao todo a figura possui " << nobjects << " bolhas\n";
+cv::imshow("image", image);
+cv::imwrite("labeling2.png", image);
+cv::waitKey();	
+----
+[#terminal_labeling2.png]
+.Terminal - labeling2.cpp
+image::PDI/3/terminal_labeling2.png[terminal_labeling2, 250, 250]
+
+[#labeling2_out.png]
+.Saída final - Labeling2
+image::PDI/3/labeling2.png[labeling, 250, 250]
