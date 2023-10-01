@@ -807,11 +807,11 @@ nome_imagem += ".png";</code></pre>
 <p>Dentro desses for’s, a vairável valFinal guarda as informações do pixels referentes a imagem Final.</p>
 </div>
 <div class="paragraph text-justify">
-<p>No trecho seguinte, os nbits menos significativos de ValFinal são deslocados à esquerda. Como nbits é igual a 5, os bits que dizem respeito a imagem que está escondida passam a ocupar as três primeiras posições do vetor (a <a href="#ilustração">ilustracao_desloc.png</a> demostra como o deslocamento descrito ocorre). Então, imagemEscondida é atualizada com a valEscondida.</p>
+<p>No trecho seguinte, os nbits menos significativos de ValFinal são deslocados à esquerda. Como nbits é igual a 5, os bits que dizem respeito a imagem que está escondida passam a ocupar as três primeiras posições do vetor (a <a href="#ilustração_desloc">ilustracao_desloc</a> demostra como o deslocamento descrito ocorre). Então, imagemEscondida é atualizada com a valEscondida.</p>
 </div>
 <div id="ilustracao_desloc" class="imageblock png">
 <div class="content">
-<img src="PDI/2/ilustracao_desloc.png" alt="bolhas" width="388" height="340">
+<img src="PDI/2/ilustracao_desloc.png" alt="ilustracao_desloc" width="388" height="340">
 </div>
 <div class="title">Figure 5. Ilustração do deslocamento de bits feito no código.</div>
 </div>
@@ -1015,7 +1015,7 @@ for (int i = 0; i &lt; height; i++) {
 </div>
 </div>
 <div class="paragraph text-justify">
-<p>A mesma ideia descrita é empregada no segundo for, mas dessa vez as iterações são feitas sobre o comprimeiro da imagem e são verificados os pixels que estão na borda superior, por meio da coordenada <em>(0, j)</em>, e na borda inferior, por meio da coordenada <em>(height - 1, j)</em>. Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<a href="#sem_bolhas_nas_bordas">sem_bolhas_nas_bordas.png</a>)</p>
+<p>A mesma ideia descrita é empregada no segundo for, mas dessa vez as iterações são feitas sobre o comprimeiro da imagem e são verificados os pixels que estão na borda superior, por meio da coordenada <em>(0, j)</em>, e na borda inferior, por meio da coordenada <em>(height - 1, j)</em>. Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<a href="#sem_bolhas_nas_bordas">sem_bolhas_nas_bordas</a>)</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1153,7 +1153,7 @@ cv::waitKey();</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-10-01 10:57:50 -0300
+Last updated 2023-10-01 11:03:19 -0300
 </div>
 </div>
 </body>

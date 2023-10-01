@@ -328,11 +328,11 @@ for (int i = 0; i < imagemFinal.rows; i++) {
 Dentro desses for’s, a vairável valFinal guarda as informações do pixels referentes a imagem Final.
 
 [.text-justify]
-No trecho seguinte, os nbits menos significativos de ValFinal são deslocados à esquerda. Como nbits é igual a 5, os bits que dizem respeito a imagem que está escondida passam a ocupar as três primeiras posições do vetor (a <<ilustração,ilustracao_desloc.png>> demostra como o deslocamento descrito ocorre). Então, imagemEscondida é atualizada com a valEscondida.  
+No trecho seguinte, os nbits menos significativos de ValFinal são deslocados à esquerda. Como nbits é igual a 5, os bits que dizem respeito a imagem que está escondida passam a ocupar as três primeiras posições do vetor (a <<ilustração_desloc,ilustracao_desloc>> demostra como o deslocamento descrito ocorre). Então, imagemEscondida é atualizada com a valEscondida.  
 
 [#ilustracao_desloc.png]
 .Ilustração do deslocamento de bits feito no código.
-image::PDI/2/ilustracao_desloc.png[bolhas, 388, 340]
+image::PDI/2/ilustracao_desloc.png[ilustracao_desloc, 388, 340]
 
 [.text-justify]
 Por fim, a imagem escondida é salva e atribui-se a ela o nome passado pelo usuário durante a execução do código. 
@@ -522,7 +522,7 @@ for (int i = 0; i < height; i++) {
 ----
 
 [.text-justify]
-A mesma ideia descrita é empregada no segundo for, mas dessa vez as iterações são feitas sobre o comprimeiro da imagem e são verificados os pixels que estão na borda superior, por meio da coordenada _(0, j)_, e na borda inferior, por meio da coordenada _(height - 1, j)_. Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<<sem_bolhas_nas_bordas,sem_bolhas_nas_bordas.png>>)
+A mesma ideia descrita é empregada no segundo for, mas dessa vez as iterações são feitas sobre o comprimeiro da imagem e são verificados os pixels que estão na borda superior, por meio da coordenada _(0, j)_, e na borda inferior, por meio da coordenada _(height - 1, j)_. Além disso, é gerada uma imagem da figura sem bolhas nas bordas (<<sem_bolhas_nas_bordas,sem_bolhas_nas_bordas>>)
 
 [source,CPP]
 ----
