@@ -960,7 +960,7 @@ A principal função do código é a on_trackbar_canny, onde estão presentes tr
 ----
 
 [.text-justify]
-O par aninhado de for’s seguinte, criteriza de maneira diferente a adição dos círculos que havia sido anteriormente. Ele perocerre os pixels da imagem points e ao identficar que trata-se de um pixel de borda, desenha um círculo na posição correspodente.
+O par aninhado de for’s seguinte, criteriza de maneira diferente a adição dos círculos que havia sido feita anteriormente. Ele perocerre os pixels da imagem points e ao identficar que trata-se de um pixel de borda, desenha um círculo na posição correspodente.
  
 [source, CPP]
 ----
@@ -997,13 +997,13 @@ O último trecho de for’s, percorre diferentes limiares do algoritmo de Canny 
     }
 ----
 
-Tendo sido explicitado os principais trehcos que compõem o algoritmo parte-se para sua execução. Como indicado, foi escolhida uma foto minha para ser a imagem de entrada.
+Tendo sido explicitado os principais trechos que compõem o algoritmo parte-se para sua execução. Como indicado, foi escolhida uma foto minha para ser a imagem de entrada.
 
 [#Adson.png]
 .Imagem de Entrada cannypoint 
 image::PDI/5/Adson.png[labeling, 250, 250]
 
-Ao executar o algoritmo mostra à esqueda a imagem de entrada com aplicação do filtro de canny, à direta a imagem pontilhista e a barra de controle de Thresholding inferior. 
+Ao executar o algoritmo, a barra de controle do Thresholding inferior encontra-se no canto superior esquerdo, a imagem de entrada com a aplicação do filtro de Canny está à esquerda, e a imagem pontilhista está à direita. 
 
 [#cannypoints1.png]
 .Execução do cannypoints - Thresholding inferior inicial
