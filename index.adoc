@@ -831,7 +831,7 @@ void makeHomomorphicFilter(const cv::Mat &image, cv::Mat &filter){
 ----
 
 [.text-justify]
-Ao executar o código utilizando como entrada a Imagem << Parceria, Entrada do Filtro Homomórfico >>, obteve-se a saída << out-homomorphic-filter, Saída do Filtro Homomórfico >>
+Ao executar o código utilizando como entrada a Imagem <<Parceria,Entrada do Filtro Homomórfico>>, obteve-se a saída <<out-homomorphic-filter,Saída do Filtro Homomórfico>>
 
 [#Parceria.png]
 .Entrada do Filtro Homomórfico 
