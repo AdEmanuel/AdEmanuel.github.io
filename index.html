@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.20">
+<meta name="generator" content="Asciidoctor 2.0.16">
 <meta name="author" content="Processamento Digital de Imagens (DCA0445)">
 <title>Página Pessoal - Adson Emanuel</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -85,10 +85,10 @@ code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;
 ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
 ul.circle{list-style-type:circle}
 ul.disc{list-style-type:disc}
-ul.square{list-style-type:square}
-ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
 ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
 dl dt{margin-bottom:.3125em;font-weight:bold}
 dl dd{margin-bottom:1.25em}
@@ -194,8 +194,7 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
-details>summary::-webkit-details-marker{display:none}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -209,10 +208,13 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -234,8 +236,9 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -272,7 +275,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -288,11 +291,10 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
-li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -335,6 +337,8 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -391,7 +395,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -461,6 +465,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_3_1_problemas_com_labeling">3.1 Problemas com labeling</a></li>
 <li><a href="#_3_2_algoritmo_de_contagem_com_floodfill">3.2 Algoritmo de contagem com <strong>floodfill</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_parte_ii_processamento_de_imagens_no_domínio_da_frequência">Parte II: Processamento de Imagens no Domínio da Frequência</a>
+<ul class="sectlevel1">
+<li><a href="#_4_filtragem_no_domínio_da_frequência">4. Filtragem no Domínio da Frequência</a>
+<ul class="sectlevel2">
+<li><a href="#_4_1_filtro_homomórfico">4.1 Filtro Homomórfico</a></li>
 </ul>
 </li>
 </ul>
@@ -1178,10 +1191,189 @@ cv::waitKey();</code></pre>
 </div>
 </div>
 </div>
+<h1 id="_parte_ii_processamento_de_imagens_no_domínio_da_frequência" class="sect0">Parte II: Processamento de Imagens no Domínio da Frequência</h1>
+<div class="sect1">
+<h2 id="_4_filtragem_no_domínio_da_frequência">4. Filtragem no Domínio da Frequência</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_4_1_filtro_homomórfico">4.1 Filtro Homomórfico</h3>
+<div class="paragraph">
+<p>Usando o programa dftfilter como base, implementou-se o programa homomorphic_filter.cpp que aplica o filtro homomórfico H(u,v). Tal filtro possui como objetivo principal melhorar imagens com iluminação irregular e tem sua função matemática definida por:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$:stem: latexmath\$
+<br>
+\$\[H(u,v) = (\gamma_H - \gamma_L)[1-e^{-c[D²(u,v)/D_0^{2}]}+\gamma_L]\]\$
+</div>
+</div>
+<div class="paragraph">
+<p>onde, Do é uma constante positiva, e D(u,v) é a distância entre um ponto (u,v) no domínio da frequênciae e o centro do retângulo de frequência, ou seja:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$:stem: latexmath\$
+<br>
+\$\[D(u,v) = [(u-P/2)²+ (v-Q/2)²]^{\frac{1}{2}}\]\$
+</div>
+</div>
+<div class="paragraph">
+<p>Além disso, a constante <em>c</em> controla a inclinação da função à medida que ela realizar a transição entre $\gamma_L$ e $\gamma_H$.</p>
+</div>
+<div class="paragraph">
+<p>O código implementado pode ser visto a seguir:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+void swapQuadrants(cv::Mat&amp; image) {
+  cv::Mat tmp, A, B, C, D;
+
+  // se a imagem tiver tamanho impar, recorta a regiao para o maior
+  // tamanho par possivel (-2 = 1111...1110)
+  image = image(cv::Rect(0, 0, image.cols &amp; -2, image.rows &amp; -2));
+
+  int centerX = image.cols / 2;
+  int centerY = image.rows / 2;
+
+  // rearranja os quadrantes da transformada de Fourier de forma que
+  // a origem fique no centro da imagem
+  // A B   -&gt;  D C
+  // C D       B A
+  A = image(cv::Rect(0, 0, centerX, centerY));
+  B = image(cv::Rect(centerX, 0, centerX, centerY));
+  C = image(cv::Rect(0, centerY, centerX, centerY));
+  D = image(cv::Rect(centerX, centerY, centerX, centerY));
+
+  // swap quadrants (Top-Left with Bottom-Right)
+  A.copyTo(tmp);
+  D.copyTo(A);
+  tmp.copyTo(D);
+
+  // swap quadrant (Top-Right with Bottom-Left)
+  C.copyTo(tmp);
+  B.copyTo(C);
+  tmp.copyTo(B);
+}
+
+void makeHomomorphicFilter(const cv::Mat &amp;image, cv::Mat &amp;filter){
+  cv::Mat_&lt;float&gt; filter2D(image.rows, image.cols);
+  int centerX = image.cols / 2;
+  int centerY = image.rows / 2;
+  float gh = 1.0, gl = 0.5, c = 2.0, D0 = 1.0;
+
+  for (int i = 0; i &lt; image.rows; i++) {
+    for (int j = 0; j &lt; image.cols; j++) {
+    	float D = std::sqrt(std::pow(i - centerY, 2) + std::pow(j - centerX, 2));
+        float H = (gh - gl) * (1 - std::exp(-c * (std::pow(D, 2) / (2 * std::pow(D0, 2))))) + gl;
+        filter2D.at&lt;float&gt;(i, j) = H;
+     }
+   }
+
+   cv::normalize(filter2D, filter2D, 0, 1, cv::NORM_MINMAX);
+   cv::Mat planes[] = {cv::Mat_&lt;float&gt;(filter2D), cv::Mat::zeros(filter2D.size(), CV_32F)};
+   cv::merge(planes, 2, filter);
+}
+
+int main(int argc, char** argv) {
+  cv::Mat image, padded, complexImage;
+  std::vector&lt;cv::Mat&gt; planos;
+
+  image = imread(argv[1], cv::IMREAD_GRAYSCALE);
+  if (image.empty()) {
+    std::cout &lt;&lt; "Erro abrindo imagem" &lt;&lt; argv[1] &lt;&lt; std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // expande a imagem de entrada para o melhor tamanho no qual a DFT pode ser
+  // executada, preenchendo com zeros a lateral inferior direita.
+  int dft_M = cv::getOptimalDFTSize(image.rows);
+  int dft_N = cv::getOptimalDFTSize(image.cols);
+  cv::copyMakeBorder(image, padded, 0, dft_M - image.rows, 0, dft_N - image.cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+
+  // prepara a matriz complexa para ser preenchida
+  // primeiro a parte real, contendo a imagem de entrada
+  planos.push_back(cv::Mat_&lt;float&gt;(padded));
+  // depois a parte imaginaria com valores nulos
+  planos.push_back(cv::Mat::zeros(padded.size(), CV_32F));
+
+  // combina os planos em uma unica estrutura de dados complexa
+  cv::merge(planos, complexImage);
+
+  // calcula a DFT
+  cv::dft(complexImage, complexImage);
+  swapQuadrants(complexImage);
+
+  // cria o filtro homomórfico e aplica a filtragem de frequencia
+  cv::Mat filter;
+  makeHomomorphicFilter(complexImage, filter);
+  cv::mulSpectrums(complexImage, filter, complexImage, 0);
+
+  // calcula a DFT inversa
+  swapQuadrants(complexImage);
+  cv::idft(complexImage, complexImage);
+
+  // planos[0] : Re(DFT(image)
+  // planos[1] : Im(DFT(image)
+  cv::split(complexImage, planos);
+
+  // recorta a imagem filtrada para o tamanho original
+  // selecionando a regiao de interesse (roi)
+  cv::Rect roi(0, 0, image.cols, image.rows);
+  cv::Mat result = planos[0](roi);
+
+  // normaliza a parte real para exibicao
+  cv::normalize(result, result, 0, 1, cv::NORM_MINMAX);
+
+  cv::imshow("image", result);
+  cv::imwrite("homomorphic-filter.png", result * 255);
+
+  cv::waitKey();
+  return EXIT_SUCCESS;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>No código, o filtro homomórifico é criado a partir da função makeHomomorphicFIlter, onde é implementado o cálculo descrito anteriormente. Dessa forma, o g do código corresponde ao  $\gamma$ da função e os valores para gh, gl, c e d foram definidos experimentalmente.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">void makeHomomorphicFilter(const cv::Mat &amp;image, cv::Mat &amp;filter){
+  cv::Mat_&lt;float&gt; filter2D(image.rows, image.cols);
+  int centerX = image.cols / 2;
+  int centerY = image.rows / 2;
+  float gh = 1.0, gl = 0.5, c = 2.0, D0 = 1.0;
+
+  for (int i = 0; i &lt; image.rows; i++) {
+    for (int j = 0; j &lt; image.cols; j++) {
+    	float D = std::sqrt(std::pow(i - centerY, 2) + std::pow(j - centerX, 2));
+        float H = (gh - gl) * (1 - std::exp(-c * (std::pow(D, 2) / (2 * std::pow(D0, 2))))) + gl;
+        filter2D.at&lt;float&gt;(i, j) = H;
+     }
+   }
+
+   cv::normalize(filter2D, filter2D, 0, 1, cv::NORM_MINMAX);
+   cv::Mat planes[] = {cv::Mat_&lt;float&gt;(filter2D), cv::Mat::zeros(filter2D.size(), CV_32F)};
+   cv::merge(planes, 2, filter);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ao executar o código utilizando como entrada a imagem EuEIsaac.png, obteve-se a saída homomorphic-filter.png</p>
+</div>
+<div class="paragraph">
+<p>O que pode-se observar analisando o resultado da filtragem é que o fundo da cena que antes estava “estourado” em decorrência da má iluminação, agora está com a luz mais controlada. Além disso, os dois indivíduos da foto, pricipalmente o da frente, fficaram um pouco mais esbranquiçados.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-10-01 15:57:28 -0300
+Last updated 2023-12-03 17:11:04 -0300
 </div>
 </div>
 </body>
