@@ -483,6 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_5_detecção_de_bordas_com_o_algoritmo_de_canny">5. Detecção de bordas com o algoritmo de Canny</a>
 <ul class="sectlevel2">
 <li><a href="#_5_1_pontilhismo_com_canny">5.1 Pontilhismo com Canny</a></li>
+<li><a href="#_5_2_quantização_vetorial_com_k_means">5.2 Quantização vetorial com k-means</a></li>
 </ul>
 </li>
 </ul>
@@ -1211,7 +1212,7 @@ cv::waitKey();</code></pre>
 </div>
 <div id="FormulaHomomorfico" class="imageblock png">
 <div class="content">
-<img src="PDI/4/FormulaHomomorfico.png" alt="FormulaHomomorfico" width="300" height="200">
+<img src="PDI/4/FormulaHomomorfico.png" alt="FormulaHomomorfico" width="350" height="250">
 </div>
 <div class="title">Figure 15. Fórmula do Filtro Homomórfico</div>
 </div>
@@ -1220,7 +1221,7 @@ cv::waitKey();</code></pre>
 </div>
 <div id="FormulaD" class="imageblock png">
 <div class="content">
-<img src="PDI/4/FormulaD.png" alt="FormulaD" width="300" height="200">
+<img src="PDI/4/FormulaD.png" alt="FormulaD" width="350" height="250">
 </div>
 <div class="title">Figure 16. Fórmula para a distância D</div>
 </div>
@@ -1373,13 +1374,13 @@ int main(int argc, char** argv) {
 </div>
 <div id="Parceria" class="imageblock png">
 <div class="content">
-<img src="PDI/4/Parceria.png" alt="Parceria" width="250" height="250">
+<img src="PDI/4/Parceria.png" alt="Parceria" width="350" height="350">
 </div>
 <div class="title">Figure 17. Entrada do Filtro Homomórfico</div>
 </div>
 <div id="out-homomorphic-filter" class="imageblock png">
 <div class="content">
-<img src="PDI/4/out-homomorphic-filter.png" alt="out-homomorphic-filter" width="250" height="250">
+<img src="PDI/4/out-homomorphic-filter.png" alt="out-homomorphic-filter" width="350" height="350">
 </div>
 <div class="title">Figure 18. Saída do Filtro Homomórfico</div>
 </div>
@@ -1541,7 +1542,7 @@ int main(int argc, char** argv) {
     }</code></pre>
 </div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Tendo sido explicitado os principais trechos que compõem o algoritmo parte-se para sua execução. Como indicado, foi escolhida uma foto minha para ser a imagem de entrada.</p>
 </div>
 <div id="Adson" class="imageblock png">
@@ -1550,29 +1551,111 @@ int main(int argc, char** argv) {
 </div>
 <div class="title">Figure 19. Imagem de Entrada cannypoint</div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Ao executar o algoritmo, a barra de controle do Thresholding inferior encontra-se no canto superior esquerdo, a imagem de entrada com a aplicação do filtro de Canny está à esquerda, e a imagem pontilhista está à direita.</p>
 </div>
 <div id="cannypoints1" class="imageblock png">
 <div class="content">
-<img src="PDI/5/cannypoints1.png" alt="cannypoints1" width="350" height="350">
+<img src="PDI/5/cannypoints1.png" alt="cannypoints1" width="450" height="450">
 </div>
 <div class="title">Figure 20. Execução do cannypoints - Thresholding inferior inicial</div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Deslocando a barra de Thresholding para direita a detecção de borda torna-se mais restrita e vão se mantendo apenas as bordas mais fortes. Dessa forma, a imagem pontilhista, que tem a criação dos seus pontos dependente da imagem de canny, acaba perdendo detalhes. É possível observar tal comportamento nas Imagens <a href="#cannypoints2">Thresholding inferior = 100</a> e <a href="#cannypoints3">Thresholding inferior = 200</a>.</p>
 </div>
 <div id="cannypoints2" class="imageblock png">
 <div class="content">
-<img src="PDI/5/cannypoints2.png" alt="cannypoints2" width="350" height="350">
+<img src="PDI/5/cannypoints2.png" alt="cannypoints2" width="450" height="450">
 </div>
 <div class="title">Figure 21. Execução do cannypoints - Thresholding inferior = 100</div>
 </div>
 <div id="cannypoints3" class="imageblock png">
 <div class="content">
-<img src="PDI/5/cannypoints3.png" alt="cannypoints3" width="350" height="350">
+<img src="PDI/5/cannypoints3.png" alt="cannypoints3" width="450" height="450">
 </div>
 <div class="title">Figure 22. Execução do cannypoints - Thresholding inferior = 200</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_2_quantização_vetorial_com_k_means">5.2 Quantização vetorial com k-means</h3>
+<div class="paragraph text-justify">
+<p>Buscando analisar os diferentes resultados gerados a partir do uso do algoritmo K-means foram feitas alterações no programa kmeans.cpp. Então, conforme solicitado, o parâmetro nRodadas foi alterado para 1 e os centros foram iniciados de forma aleatória a partir do parâmetro KMEANS_RANDOM_CENTERS.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">#include &lt;cstdlib&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+int main(int argc, char** argv) {
+    int nClusters = 8, nRodadas = 1;
+
+    cv::Mat img = cv::imread(argv[1], cv::IMREAD_COLOR);
+    if (img.empty()) {
+        std::cout &lt;&lt; "Erro abrindo imagem " &lt;&lt; argv[1] &lt;&lt; std::endl;
+        return EXIT_FAILURE;
+    }
+
+    cv::Mat samples(img.rows * img.cols, 3, CV_32F);
+
+    for (int y = 0; y &lt; img.rows; y++) {
+        for (int x = 0; x &lt; img.cols; x++) {
+            for (int z = 0; z &lt; 3; z++) {
+                samples.at&lt;float&gt;(y + x * img.rows, z) = img.at&lt;cv::Vec3b&gt;(y, x)[z];
+            }
+        }
+    }
+
+    for (int i = 0; i &lt; 10; i++) {
+        cv::Mat rotulos, centros;
+
+        cv::kmeans(samples, nClusters, rotulos,
+                   cv::TermCriteria(cv::TermCriteria::EPS | cv::TermCriteria::COUNT,
+                                    10000, 0.0001),
+                   nRodadas, cv::KMEANS_RANDOM_CENTERS, centros);
+
+        cv::Mat rotulada(img.size(), img.type());
+        for (int y = 0; y &lt; img.rows; y++) {
+            for (int x = 0; x &lt; img.cols; x++) {
+                int indice = rotulos.at&lt;int&gt;(y + x * img.rows, 0);
+                rotulada.at&lt;cv::Vec3b&gt;(y, x)[0] = (uchar)centros.at&lt;float&gt;(indice, 0);
+                rotulada.at&lt;cv::Vec3b&gt;(y, x)[1] = (uchar)centros.at&lt;float&gt;(indice, 1);
+                rotulada.at&lt;cv::Vec3b&gt;(y, x)[2] = (uchar)centros.at&lt;float&gt;(indice, 2);
+            }
+        }
+
+        std::string nomeSaida = "sushi-kmeans" + std::to_string(i) + ".jpg";
+
+        cv::imwrite(nomeSaida, rotulada);
+
+    }
+
+    //ImageMagick sendo usado para criar um GIF a partir das imagens
+    system("convert -delay 100 -loop 0 sushi-kmeans*.jpg output.gif");
+
+    return 0;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>No código, implementou-se um loop para fazer com que o Kmeans seja executado 10 vezes, dessa forma, cada iteração gera uma imagem que é salva na memória. Por fim, utilizou-se a ferramenta ImageMagick para converter as imagens geradas em um arquivo GIF.</p>
+</div>
+<div class="paragraph text-justify">
+<p>Como exemplo de aplicação, tem-se a imagem de entrada  <a href="#sushi">sushi.jpg</a> e a saída <a href="#output_kmeans">output_kmeans.gif</a></p>
+</div>
+<div id="sushi" class="imageblock jpg">
+<div class="content">
+<img src="PDI/5/sushi.jpg" alt="sushi" width="450" height="450">
+</div>
+<div class="title">Figure 23. Imagem de entrada para o algoritmo Kmeans</div>
+</div>
+<div id="output_kmeans" class="imageblock gif">
+<div class="content">
+<img src="PDI/5/output_kmeans.gif" alt="output_kmeans" width="450" height="450">
+</div>
+<div class="title">Figure 24. GIF de saída do algoritmo Kmeans</div>
+</div>
+<div class="paragraph">
+<p>De posse do GIF é possível confirmar que o Kmeans gera resultados diferentes para cada iteração. Isso ocorre porque a definição dos centros de forma aleatória influencia a formação inicial dos clusters e, consequentemente, afeta a solução final.</p>
 </div>
 </div>
 </div>
@@ -1580,7 +1663,7 @@ int main(int argc, char** argv) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-12-03 19:56:40 -0300
+Last updated 2023-12-03 20:22:35 -0300
 </div>
 </div>
 </body>
