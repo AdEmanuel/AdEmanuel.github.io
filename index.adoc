@@ -675,18 +675,18 @@ image::PDI/3/labeling2.png[labeling, 250, 250]
 === 4.1 Filtro Homomórfico
 
 [.text-justify]
-Usando o programa dftfilter como base, implementou-se o programa homomorphic_filter.cpp que aplica o filtro homomórfico H(u,v). Tal filtro possui como objetivo principal melhorar imagens com iluminação irregular e tem sua função matemática definida por:
+Usando o programa dftfilter.cpp como base, implementou-se o programa homomorphic_filter.cpp que aplica o filtro homomórfico H(u,v). Tal filtro possui como objetivo principal melhorar imagens com iluminação irregular e tem sua função matemática definida por:
 
 [#FormulaHomomorfico.png]
 .Fórmula do Filtro Homomórfico
-image::PDI/4/FormulaHomomorfico.png[FormulaHomomorfico, 400, 200]
+image::PDI/4/FormulaHomomorfico.png[FormulaHomomorfico, 200, 100]
 
 [.text-justify]
 onde, Do é uma constante positiva, e D(u,v) é a distância entre um ponto (u,v) no domínio da frequênciae e o centro do retângulo de frequência, ou seja:
 
 [#FormulaD.png]
-.Fórmula do Filtro Homomórfico
-image::PDI/4/FormulaD.png[FormulaD, 400, 200]
+.Fórmula para a distância D
+image::PDI/4/FormulaD.png[FormulaD, 200, 100]
 
 Além disso, a constante _c_ controla a inclinação da função à medida que ela realizar a transição entre gamma_L e gamma_H.
 
@@ -806,7 +806,7 @@ int main(int argc, char** argv) {
 ----
 
 [.text-justify]
-No código, o filtro homomórifico é criado a partir da função makeHomomorphicFIlter, onde é implementado o cálculo descrito anteriormente. Dessa forma, o g do código corresponde ao  gama da função e os valores para gh, gl, c e d foram definidos experimentalmente. 
+No código, o filtro homomórifico é criado a partir da função makeHomomorphicFIlter, onde é implementado o cálculo descrito anteriormente. Dessa forma, o _g_ do código corresponde ao  gama da função e os valores para _gh_, _gl_, _c_ e _D0_ foram definidos experimentalmente. 
 
 [source,CPP]
 ----
@@ -835,11 +835,11 @@ Ao executar o código utilizando como entrada a Imagem << Parceria, Entrada do F
 
 [#Parceria.png]
 .Entrada do Filtro Homomórfico 
-image::PDI/3/Parceria.png[Parceria, 250, 250]
+image::PDI/4/Parceria.png[Parceria, 250, 250]
 
 [#out-homomorphic-filter.png]
 .Saída do Filtro Homomórfico
-image::PDI/3/Parceria.png[out-homomorphic-filter, 250, 250]
+image::PDI/4/out-homomorphic-filter.png[out-homomorphic-filter, 250, 250]
 
 [.text-justify]
 O que pode-se observar analisando o resultado da filtragem é que o fundo da cena que antes estava “estourado” em decorrência da má iluminação, agora está com a luz mais controlada. Além disso, os dois indivíduos da foto, pricipalmente o da frente, ficaram um pouco mais esbranquiçados. 
