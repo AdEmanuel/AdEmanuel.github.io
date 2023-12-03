@@ -1197,28 +1197,26 @@ cv::waitKey();</code></pre>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_4_1_filtro_homomórfico">4.1 Filtro Homomórfico</h3>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>Usando o programa dftfilter como base, implementou-se o programa homomorphic_filter.cpp que aplica o filtro homomórfico H(u,v). Tal filtro possui como objetivo principal melhorar imagens com iluminação irregular e tem sua função matemática definida por:</p>
 </div>
-<div class="stemblock">
+<div id="FormulaHomomorfico" class="imageblock png">
 <div class="content">
-\$:stem: latexmath\$
-<br>
-\$\[H(u,v) = (\gamma_H - \gamma_L)[1-e^{-c[D²(u,v)/D_0^{2}]}+\gamma_L]\]\$
+<img src="PDI/4/FormulaHomomorfico.png" alt="FormulaHomomorfico" width="400" height="200">
 </div>
+<div class="title">Figure 15. Fórmula do Filtro Homomórfico</div>
 </div>
-<div class="paragraph">
+<div class="paragraph text-justify">
 <p>onde, Do é uma constante positiva, e D(u,v) é a distância entre um ponto (u,v) no domínio da frequênciae e o centro do retângulo de frequência, ou seja:</p>
 </div>
-<div class="stemblock">
+<div id="FormulaD" class="imageblock png">
 <div class="content">
-\$:stem: latexmath\$
-<br>
-\$\[D(u,v) = [(u-P/2)²+ (v-Q/2)²]^{\frac{1}{2}}\]\$
+<img src="PDI/4/FormulaD.png" alt="FormulaD" width="400" height="200">
 </div>
+<div class="title">Figure 16. Fórmula do Filtro Homomórfico</div>
 </div>
 <div class="paragraph">
-<p>Além disso, a constante <em>c</em> controla a inclinação da função à medida que ela realizar a transição entre $\gamma_L$ e $\gamma_H$.</p>
+<p>Além disso, a constante <em>c</em> controla a inclinação da função à medida que ela realizar a transição entre gamma_L e gamma_H.</p>
 </div>
 <div class="paragraph">
 <p>O código implementado pode ser visto a seguir:</p>
@@ -1336,8 +1334,8 @@ int main(int argc, char** argv) {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>No código, o filtro homomórifico é criado a partir da função makeHomomorphicFIlter, onde é implementado o cálculo descrito anteriormente. Dessa forma, o g do código corresponde ao  $\gamma$ da função e os valores para gh, gl, c e d foram definidos experimentalmente.</p>
+<div class="paragraph text-justify">
+<p>No código, o filtro homomórifico é criado a partir da função makeHomomorphicFIlter, onde é implementado o cálculo descrito anteriormente. Dessa forma, o g do código corresponde ao  gama da função e os valores para gh, gl, c e d foram definidos experimentalmente.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1361,11 +1359,23 @@ int main(int argc, char** argv) {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Ao executar o código utilizando como entrada a imagem EuEIsaac.png, obteve-se a saída homomorphic-filter.png</p>
+<div class="paragraph text-justify">
+<p>Ao executar o código utilizando como entrada a Imagem &lt;&lt; Parceria, Entrada do Filtro Homomórfico &gt;&gt;, obteve-se a saída &lt;&lt; out-homomorphic-filter, Saída do Filtro Homomórfico &gt;&gt;</p>
 </div>
-<div class="paragraph">
-<p>O que pode-se observar analisando o resultado da filtragem é que o fundo da cena que antes estava “estourado” em decorrência da má iluminação, agora está com a luz mais controlada. Além disso, os dois indivíduos da foto, pricipalmente o da frente, fficaram um pouco mais esbranquiçados.</p>
+<div id="Parceria" class="imageblock png">
+<div class="content">
+<img src="PDI/3/Parceria.png" alt="Parceria" width="250" height="250">
+</div>
+<div class="title">Figure 17. Entrada do Filtro Homomórfico</div>
+</div>
+<div id="out-homomorphic-filter" class="imageblock png">
+<div class="content">
+<img src="PDI/3/Parceria.png" alt="out-homomorphic-filter" width="250" height="250">
+</div>
+<div class="title">Figure 18. Saída do Filtro Homomórfico</div>
+</div>
+<div class="paragraph text-justify">
+<p>O que pode-se observar analisando o resultado da filtragem é que o fundo da cena que antes estava “estourado” em decorrência da má iluminação, agora está com a luz mais controlada. Além disso, os dois indivíduos da foto, pricipalmente o da frente, ficaram um pouco mais esbranquiçados.</p>
 </div>
 </div>
 </div>
@@ -1373,7 +1383,7 @@ int main(int argc, char** argv) {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-12-03 17:11:04 -0300
+Last updated 2023-12-03 18:39:42 -0300
 </div>
 </div>
 </body>
