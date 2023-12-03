@@ -478,6 +478,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#_parte_iii_segmentação_de_imagens">Parte III: Segmentação de imagens</a>
+<ul class="sectlevel1">
+<li><a href="#_5_detecção_de_bordas_com_o_algoritmo_de_canny">5. Detecção de bordas com o algoritmo de Canny</a>
+<ul class="sectlevel2">
+<li><a href="#_5_1_pontilhismo_com_canny">5.1 Pontilhismo com Canny</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1202,7 +1211,7 @@ cv::waitKey();</code></pre>
 </div>
 <div id="FormulaHomomorfico" class="imageblock png">
 <div class="content">
-<img src="PDI/4/FormulaHomomorfico.png" alt="FormulaHomomorfico" width="200" height="100">
+<img src="PDI/4/FormulaHomomorfico.png" alt="FormulaHomomorfico" width="300" height="200">
 </div>
 <div class="title">Figure 15. Fórmula do Filtro Homomórfico</div>
 </div>
@@ -1211,7 +1220,7 @@ cv::waitKey();</code></pre>
 </div>
 <div id="FormulaD" class="imageblock png">
 <div class="content">
-<img src="PDI/4/FormulaD.png" alt="FormulaD" width="200" height="100">
+<img src="PDI/4/FormulaD.png" alt="FormulaD" width="300" height="200">
 </div>
 <div class="title">Figure 16. Fórmula para a distância D</div>
 </div>
@@ -1360,7 +1369,7 @@ int main(int argc, char** argv) {
 </div>
 </div>
 <div class="paragraph text-justify">
-<p>Ao executar o código utilizando como entrada a Imagem <a href="#Parceria">Entrada do Filtro Homomórfico</a>, obteve-se a saída <a href="#out-homomorphic-filter">Saída do Filtro Homomórfico</a></p>
+<p>Ao executar o código utilizando como entrada a Imagem <a href="#Parceria">Entrada do Filtro Homomórfico</a>, obteve-se a saída <a href="#out-homomorphic-filter">Saída do Filtro Homomórfico</a>.</p>
 </div>
 <div id="Parceria" class="imageblock png">
 <div class="content">
@@ -1380,10 +1389,198 @@ int main(int argc, char** argv) {
 </div>
 </div>
 </div>
+<h1 id="_parte_iii_segmentação_de_imagens" class="sect0">Parte III: Segmentação de imagens</h1>
+<div class="sect1">
+<h2 id="_5_detecção_de_bordas_com_o_algoritmo_de_canny">5. Detecção de bordas com o algoritmo de Canny</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_5_1_pontilhismo_com_canny">5.1 Pontilhismo com Canny</h3>
+<div class="paragraph text-justify">
+<p>Buscando usar as bordas produzidas pelo algoritmo de Canny para melhorar a qualidade da imagem pontilhista gerada, criou-se o algoritmo <a href="#cannypoints">cannypoints.cpp</a> que tem como base os algoritmos canny.cpp e pontilhismo.cpp presentes no material do disponibilizado pelo professor.</p>
+</div>
+<div id="cannypoints" class="listingblock">
+<div class="title">cannypoints.cpp</div>
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">#include &lt;iostream&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+#include &lt;vector&gt;
+
+#define STEP 5
+#define JITTER 3
+#define RAIO 3
+
+int top_slider = 10;
+int top_slider_max = 200;
+
+char TrackbarName[50];
+
+cv::Mat image, border, points;
+
+void on_trackbar_canny(int, void*) {
+    cv::Canny(image, border, top_slider, 3 * top_slider);
+    cv::imshow("Canny", border);
+
+    points = cv::Mat(image.rows, image.cols, CV_8U, cv::Scalar(255));
+
+    // Desenha pontos na imagem pontilhista
+    for (int i = 0; i &lt; image.rows; i += STEP) {
+        for (int j = 0; j &lt; image.cols; j += STEP) {
+            int x = i + std::rand() % (2 * JITTER) - JITTER + 1;
+            int y = j + std::rand() % (2 * JITTER) - JITTER + 1;
+            int gray = image.at&lt;uchar&gt;(x, y);
+            cv::circle(points, cv::Point(y, x), RAIO, CV_RGB(gray, gray, gray),
+                       cv::FILLED, cv::LINE_AA);
+        }
+    }
+
+    // Usa a posição dos pixels de borda encontrados pelo algoritmo de Canny
+    // para desenhar pontos nos respectivos locais na imagem gerada
+    for (int i = 0; i &lt; image.rows; i++) {
+        for (int j = 0; j &lt; image.cols; j++) {
+            if (border.at&lt;uchar&gt;(i, j) &gt; 0) {
+                int gray = image.at&lt;uchar&gt;(i, j);
+                cv::circle(points, cv::Point(j, i), RAIO, CV_RGB(gray, gray, gray),
+                           cv::FILLED, cv::LINE_AA);
+            }
+        }
+    }
+
+    // Aumenta os limiares do algoritmo de Canny
+    for (int thresh = top_slider + 10; thresh &lt;= top_slider_max; thresh += 10) {
+        cv::Canny(image, border, thresh, 3 * thresh);
+
+        for (int i = 0; i &lt; image.rows; i++) {
+            for (int j = 0; j &lt; image.cols; j++) {
+                if (border.at&lt;uchar&gt;(i, j) &gt; 0) {
+                    int gray = image.at&lt;uchar&gt;(i, j);
+                    cv::circle(points, cv::Point(j, i), RAIO / 2, CV_RGB(gray, gray, gray),
+                               cv::FILLED, cv::LINE_AA);
+                }
+            }
+        }
+    }
+
+    cv::imshow("Pontilhismo", points);
+}
+
+int main(int argc, char** argv) {
+    image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
+
+    sprintf(TrackbarName, "Threshold inferior", top_slider_max);
+
+    cv::namedWindow("Canny", 1);
+    cv::createTrackbar(TrackbarName, "Canny",
+                       &amp;top_slider,
+                       top_slider_max,
+                       on_trackbar_canny);
+
+    on_trackbar_canny(top_slider, 0);
+
+    cv::waitKey();
+    cv::imwrite("cannyborders.png", border);
+    cv::imwrite("pontos.jpg", points);
+
+    return 0;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>A principal função do código é a on_trackbar_canny, onde estão presentes três conjuntos de for’s. O primeiro deles, percorre a imagem points e adiciona círculos de raio 3 de maneira pseudoaleatória.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">    points = cv::Mat(image.rows, image.cols, CV_8U, cv::Scalar(255));
+
+    // Desenho de círculos na imagem pontilhista
+    for (int i = 0; i &lt; image.rows; i += STEP) {
+        for (int j = 0; j &lt; image.cols; j += STEP) {
+            int x = i + std::rand() % (2 * JITTER) - JITTER + 1;
+            int y = j + std::rand() % (2 * JITTER) - JITTER + 1;
+            int gray = image.at&lt;uchar&gt;(x, y);
+            cv::circle(points, cv::Point(y, x), RAIO, CV_RGB(gray, gray, gray),
+                       cv::FILLED, cv::LINE_AA);
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>O par aninhado de for’s seguinte, criteriza de maneira diferente a adição dos círculos que havia sido anteriormente. Ele perocerre os pixels da imagem points e ao identficar que trata-se de um pixel de borda, desenha um círculo na posição correspodente.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">    // Desenho de círuclos a partir de Canny
+    for (int i = 0; i &lt; image.rows; i++) {
+        for (int j = 0; j &lt; image.cols; j++) {
+            if (border.at&lt;uchar&gt;(i, j) &gt; 0) {
+                int gray = image.at&lt;uchar&gt;(i, j);
+                cv::circle(points, cv::Point(j, i), RAIO, CV_RGB(gray, gray, gray),
+                           cv::FILLED, cv::LINE_AA);
+            }
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph text-justify">
+<p>O último trecho de for’s, percorre diferentes limiares do algoritmo de Canny utilizando como base o valor do cursor, onde as bordas detectadas por esse algoritmo são então realçadas em points. Isso faz com que seja mostrada uma sequência de imagens pontilhadas, cada uma destacando as bordas com um limiar de detecção diferente.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-CPP" data-lang="CPP">// Aumenta os limiares do algoritmo de Canny
+    for (int thresh = top_slider + 10; thresh &lt;= top_slider_max; thresh += 10) {
+        cv::Canny(image, border, thresh, 3 * thresh);
+
+        for (int i = 0; i &lt; image.rows; i++) {
+            for (int j = 0; j &lt; image.cols; j++) {
+                if (border.at&lt;uchar&gt;(i, j) &gt; 0) {
+                    int gray = image.at&lt;uchar&gt;(i, j);
+                    cv::circle(points, cv::Point(j, i), RAIO / 2, CV_RGB(gray, gray, gray),
+                               cv::FILLED, cv::LINE_AA);
+                }
+            }
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Tendo sido explicitado os principais trehcos que compõem o algoritmo parte-se para sua execução. Como indicado, foi escolhida uma foto minha para ser a imagem de entrada.</p>
+</div>
+<div id="Adson" class="imageblock png">
+<div class="content">
+<img src="PDI/5/Adson.png" alt="labeling" width="250" height="250">
+</div>
+<div class="title">Figure 19. Imagem de Entrada cannypoint</div>
+</div>
+<div class="paragraph">
+<p>Ao executar o algoritmo mostra à esqueda a imagem de entrada com aplicação do filtro de canny, à direta a imagem pontilhista e a barra de controle de Thresholding inferior.</p>
+</div>
+<div id="cannypoints1" class="imageblock png">
+<div class="content">
+<img src="PDI/5/cannypoints1.png" alt="cannypoints1" width="250" height="250">
+</div>
+<div class="title">Figure 20. Execução do cannypoints - Thresholding inferior inicial</div>
+</div>
+<div class="paragraph">
+<p>Deslocando a barra de Thresholding para direita a detecção de borda torna-se mais restrita e vão se mantendo apenas as bordas mais fortes. Dessa forma, a imagem pontilhista, que tem a criação dos seus pontos dependente da imagem de canny, acaba perdendo detalhes. É possível observar tal comportamento nas Imagens <a href="#cannypoints2">Thresholding inferior = 100</a> e <a href="#cannypoints3">Thresholding inferior = 200</a>.</p>
+</div>
+<div id="cannypoints2" class="imageblock png">
+<div class="content">
+<img src="PDI/5/cannypoints2.png" alt="cannypoints2" width="250" height="250">
+</div>
+<div class="title">Figure 21. Execução do cannypoints - Thresholding inferior = 100</div>
+</div>
+<div id="cannypoints3" class="imageblock png">
+<div class="content">
+<img src="PDI/5/cannypoints3.png" alt="cannypoints3" width="250" height="250">
+</div>
+<div class="title">Figure 22. Execução do cannypoints - Thresholding inferior = 200</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-12-03 18:47:44 -0300
+Last updated 2023-12-03 19:45:12 -0300
 </div>
 </div>
 </body>
