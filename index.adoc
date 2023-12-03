@@ -1091,11 +1091,11 @@ Como exemplo de aplicação, tem-se a imagem de entrada  <<sushi,sushi.jpg>> e a
 
 [#sushi.jpg]
 .Imagem de entrada para o algoritmo Kmeans
-image::PDI/5/sushi.jpg[sushi, 450, 450]
+image::PDI/5/sushi.jpg[sushi, 640, 480]
 
 [#output_kmeans.gif]
 .GIF de saída do algoritmo Kmeans
-image::PDI/5/output_kmeans.gif[output_kmeans, 450, 450]
+image::PDI/5/output_kmeans.gif[output_kmeans, 640, 480]
 
 De posse do GIF é possível confirmar que o Kmeans gera resultados diferentes para cada iteração. Isso ocorre porque a definição dos centros de forma aleatória influencia a formação inicial dos clusters e, consequentemente, afeta a solução final.
 
