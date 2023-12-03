@@ -1007,17 +1007,17 @@ Ao executar o algoritmo, a barra de controle do Thresholding inferior encontra-s
 
 [#cannypoints1.png]
 .Execução do cannypoints - Thresholding inferior inicial
-image::PDI/5/cannypoints1.png[cannypoints1, 250, 250]
+image::PDI/5/cannypoints1.png[cannypoints1, 350, 350]
 
 Deslocando a barra de Thresholding para direita a detecção de borda torna-se mais restrita e vão se mantendo apenas as bordas mais fortes. Dessa forma, a imagem pontilhista, que tem a criação dos seus pontos dependente da imagem de canny, acaba perdendo detalhes. É possível observar tal comportamento nas Imagens <<cannypoints2,Thresholding inferior = 100>> e <<cannypoints3,Thresholding inferior = 200>>. 
 
 [#cannypoints2.png]
 .Execução do cannypoints - Thresholding inferior = 100
-image::PDI/5/cannypoints2.png[cannypoints2, 250, 250]
+image::PDI/5/cannypoints2.png[cannypoints2, 350, 350]
 
 [#cannypoints3.png]
 .Execução do cannypoints - Thresholding inferior = 200
-image::PDI/5/cannypoints3.png[cannypoints3, 250, 250]
+image::PDI/5/cannypoints3.png[cannypoints3, 350, 350]
 
 
 
