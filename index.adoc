@@ -1103,7 +1103,7 @@ De posse do GIF é possível confirmar que o Kmeans gera resultados diferentes p
 == 6. Filtragem de forma com morfologia matemática
 
 [.text-justify]
-Com o objetivo de resolver o problema do reconhecimento de caracteres, a aplicação da morfologia deve utilizar um elemento estruturante (structuring element - SE) capaz de juntar os segmentos que formam os números sem permitir um coneção entre os números e o ponto. O código a seguir implementa tal funcionalidade. 
+Com o objetivo de resolver o problema do reconhecimento de caracteres, a aplicação da morfologia deve utilizar um elemento estruturante (structuring element - SE) capaz de juntar os segmentos que formam os números sem permitir um conexão entre os números e o ponto. O código a seguir implementa tal funcionalidade. 
 
 [source, CPP]
 ----
