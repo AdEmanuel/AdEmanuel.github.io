@@ -846,9 +846,7 @@ O que pode-se observar analisando o resultado da filtragem é que o fundo da cen
 
 = Parte III: Segmentação de imagens
 
-== 5. Detecção de bordas com o algoritmo de Canny
-
-=== 5.1 Pontilhismo com Canny
+== 5.1 Detecção de bordas com o algoritmo de Canny
 
 [.text-justify]
 Buscando usar as bordas produzidas pelo algoritmo de Canny para melhorar a qualidade da imagem pontilhista gerada, criou-se o algoritmo <<cannypoints,cannypoints.cpp>> que tem como base os algoritmos canny.cpp e pontilhismo.cpp presentes no material do disponibilizado pelo professor.
@@ -1022,7 +1020,7 @@ image::PDI/5/cannypoints2.png[cannypoints2, 450, 450]
 .Execução do cannypoints - Thresholding inferior = 200
 image::PDI/5/cannypoints3.png[cannypoints3, 450, 450]
 
-=== 5.2 Quantização vetorial com k-means
+== 5.2 Quantização vetorial com k-means
 
 [.text-justify]
 Buscando analisar os diferentes resultados gerados a partir do uso do algoritmo K-means foram feitas alterações no programa kmeans.cpp. Então, conforme solicitado, o parâmetro nRodadas foi alterado para 1 e os centros foram iniciados de forma aleatória a partir do parâmetro KMEANS_RANDOM_CENTERS.
@@ -1097,5 +1095,73 @@ image::PDI/5/sushi.jpg[sushi, 640, 480]
 .GIF de saída do algoritmo Kmeans
 image::PDI/5/output_kmeans.gif[output_kmeans, 640, 480]
 
+[.text-justify]
 De posse do GIF é possível confirmar que o Kmeans gera resultados diferentes para cada iteração. Isso ocorre porque a definição dos centros de forma aleatória influencia a formação inicial dos clusters e, consequentemente, afeta a solução final.
 
+= Parte IV: Outras Transformadas Matemáticas
+
+== 6. Filtragem de forma com morfologia matemática
+
+[.text-justify]
+Com o objetivo de resolver o problema do reconhecimento de caracteres, a aplicação da morfologia deve utilizar um elemento estruturante (structuring element - SE) capaz de juntar os segmentos que formam os números sem permitir um coneção entre os números e o ponto. O código a seguir implementa tal funcionalidade. 
+
+[source, CPP]
+----
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int argc, char** argv) {
+    cv::Mat image, abertura;
+    cv::Mat str;
+
+    if (argc != 2) {
+        std::cout << "morfologia entrada saida\n";
+        return -1;
+    }
+
+    image = cv::imread(argv[1], cv::IMREAD_UNCHANGED);
+
+    if (image.empty()) {
+        std::cout << "Erro ao carregar a imagem: " << argv[1] << std::endl;
+        return -1;
+    }
+
+    str = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 12));
+
+    cv::morphologyEx(image, abertura, cv::MORPH_OPEN, str);
+
+    cv::Mat matArray[] = {image, abertura};
+    cv::hconcat(matArray, 2, image);
+
+    cv::imwrite("079.png", image);
+
+    cv::waitKey();
+    return 0;
+}
+----
+
+[.text-justify]
+No código, utilizou-se um SE do tipo MORPH_RECT, que corresponde a um retângulo vertical cujo tamanho foi escolhido de modo a abranger pelo menos o tamanho da abertura entre os segmentos. Desse modo, quando o centro do SE estiver no meio do espaço entre segmentos, toda aquela região será preenchida. 
+
+[.text-justify]
+Além disso, optou-se por utilizar operação de abertura que consiste em duas etapas: erosão seguida de dilatação. Com tal operação, obteve-se os resultados presentes a seguir, onde na esquerda temos a imagem original e na direita a imagem filtrada com morfologia. 
+
+[#015.png]
+.Resultado para o dígito 01.5
+image::PDI/5/015.png[sushi, 350, 250]
+
+[#030.png]
+.Resultado para o dígito 03.0
+image::PDI/5/030.png[sushi, 350, 250]
+
+[#037.png]
+.Resultado para o dígito 03.7
+image::PDI/5/037.png[sushi, 350, 250]
+
+[#059.png]
+.Resultado para o dígito 05.9
+image::PDI/5/059.png[sushi, 350, 250]
+
+[#079.png]
+.Resultado para o dígito 07.09
+image::PDI/5/079.png[sushi, 350, 250]
